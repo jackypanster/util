@@ -11,7 +11,7 @@ go get github.com/jackypanster/util
 + Queue
 
 ```go
-util.Init(128, 1024)
+util.InitQueue(64, 65536)
 util.JobQueue <- util.Job {
     Do: func() error {
         // do something
