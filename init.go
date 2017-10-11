@@ -1,7 +1,7 @@
 package util
 
-import "fmt"
+import "log"
 
-func Demo() {
-	fmt.Println("jacky")
+func init() {
+	log.Println("init")
 }
