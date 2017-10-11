@@ -1,4 +1,4 @@
-# Library util
+## Introduction
 An utilities package for Golang project
 
 ## Installing
