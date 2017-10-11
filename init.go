@@ -3,5 +3,5 @@ package util
 import "log"
 
 func init() {
-	log.Println("init")
+	log.Println("initialize package util")
 }
