@@ -3,8 +3,8 @@ package util
 import "log"
 
 // Job represents the job to be run
-type Job interface {
-	Do() error
+type Job struct {
+	Do func() error
 }
 
 // Worker represents the worker that executes the job
