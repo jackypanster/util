@@ -8,8 +8,8 @@ func init() {
 	log.Println("initialize package util")
 }
 
-func InitQueue(maxWorkers int, size int) {
-	JobQueue = make(chan Job, size)
+func InitQueue(maxWorkers int, queueSize int) {
+	JobQueue = make(chan Job, queueSize)
 	d := NewDispatcher(maxWorkers)
 	d.Run()
 }
