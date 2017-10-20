@@ -3,7 +3,7 @@ An utilities package for Golang project
 
 ## Installing
 ```bash
-go get github.com/jackypanster/util
+go get -u github.com/jackypanster/util
 ```
 
 ## Examples
