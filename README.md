@@ -20,6 +20,13 @@ util.JobQueue <- util.Job {
 }
 ```
 
++ Array
+
+```go
+src := []string{"a", "a", "a"}
+dst := util.Uniq(src)
+```
+
 + Redis
 
 + MongoDB
