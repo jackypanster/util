@@ -31,7 +31,7 @@ func (w Worker) Start() {
 			select {
 			case job := <-w.JobChannel:
 				if err := job.Do(); err != nil {
-					log.Printf("error %+v\n", err)
+					log.Printf("[ERROR] %s\n", err.Error())
 				}
 			case <-w.quit:
 				// we have received a signal to stop
