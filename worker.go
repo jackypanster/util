@@ -1,6 +1,9 @@
 package util
 
-import "log"
+import (
+	"log"
+	"time"
+)
 
 // Job represents the job to be run
 type Job struct {
@@ -35,14 +38,12 @@ func (w *Worker) Start() {
 			w.WorkerPool <- w.JobChannel
 			select {
 			case job := <-w.JobChannel:
-				if Debug {
-					log.Printf("[Worker %d] starts", w.id)
-				}
+				start := time.Now()
 				if err := job.Do(); err != nil {
 					log.Printf("[ERROR] %s\n", err.Error())
 				}
 				if Debug {
-					log.Printf("[Worker %d] ends", w.id)
+					log.Printf("[WORKER %d] cost %s", w.id, time.Now().Sub(start))
 				}
 			case <-w.quit:
 				// we have received a signal to stop

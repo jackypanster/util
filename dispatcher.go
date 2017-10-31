@@ -1,5 +1,7 @@
 package util
 
+import "log"
+
 type Dispatcher struct {
 	// A pool of workers channels that are registered with the dispatcher
 	workerPool chan chan Job
@@ -17,6 +19,9 @@ func (d *Dispatcher) Run() {
 		worker := NewWorker(d.workerPool)
 		worker.SetId(i)
 		worker.Start()
+	}
+	if Debug {
+		log.Printf("[INIT] Queue %d, Worker %d", len(JobQueue), d.maxWorkers)
 	}
 	go d.dispatch()
 }

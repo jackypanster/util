@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/jackypanster/util"
-	"log"
+	"time"
 )
 
 func main() {
@@ -14,7 +14,7 @@ func main() {
 	for i := 0; i < 256; i ++ {
 		util.JobQueue <- util.Job{
 			Do: func() error {
-				log.Println("testing")
+				time.Sleep(time.Microsecond * time.Duration(i*i))
 				done <- true
 				return nil
 			},

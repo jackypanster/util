@@ -3,6 +3,10 @@ package util
 var JobQueue chan Job
 var Debug = false
 
+func init() {
+	SetDebug(false) // default settings
+}
+
 func SetDebug(debug bool) {
 	Debug = debug
 }
