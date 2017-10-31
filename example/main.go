@@ -3,25 +3,27 @@ package main
 import (
 	"github.com/jackypanster/util"
 	"time"
+	"log"
 )
 
 func main() {
-	done := make(chan bool, 256)
+	done := make(chan bool, 16)
 
 	util.SetDebug(true)
-	util.InitQueue(16, 1024)
+	util.InitQueue(8, 1024)
 
-	for i := 0; i < 256; i ++ {
+	for i := 1; i <= 16; i ++ {
 		util.JobQueue <- util.Job{
 			Do: func() error {
-				time.Sleep(time.Microsecond * time.Duration(i*i))
+				log.Printf("sleep %d sec", i)
+				time.Sleep(time.Second * time.Duration(i))
 				done <- true
 				return nil
 			},
 		}
 	}
 
-	for i := 0; i < 256; i ++ {
+	for i := 0; i < 16; i ++ {
 		<-done
 	}
 }
