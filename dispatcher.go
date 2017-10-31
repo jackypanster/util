@@ -34,7 +34,7 @@ func (d *Dispatcher) dispatch() {
 			// try to obtain a worker job channel that is available
 			// this will block until a worker is idle
 			if Debug {
-				log.Printf("[RUNNING] queue size %d, pool size %d", len(JobQueue), len(w.WorkerPool))
+				log.Printf("[RUNNING] queue size %d, pool size %d", len(JobQueue), len(d.workerPool))
 			}
 			go func(job Job) {
 				jobChannel := <-d.workerPool
