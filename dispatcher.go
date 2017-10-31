@@ -21,7 +21,7 @@ func (d *Dispatcher) Run() {
 		worker.Start()
 	}
 	if Debug {
-		log.Printf("[INIT] Buffer %d, Worker %d", cap(JobQueue), d.maxWorkers)
+		log.Printf("[INIT] Queue size %d, Pool size %d", len(JobQueue), len(d.workerPool))
 	}
 	go d.dispatch()
 }

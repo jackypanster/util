@@ -37,7 +37,7 @@ func (w *Worker) Start() {
 			// register the current worker into the worker queue
 			w.WorkerPool <- w.JobChannel
 			if Debug {
-				log.Printf("[RUNNING] job left %d, available worker %d", len(JobQueue), len(w.WorkerPool))
+				log.Printf("[RUNNING] queue size %d, pool size %d", len(JobQueue), len(w.WorkerPool))
 			}
 			select {
 			case job := <-w.JobChannel:
