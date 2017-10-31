@@ -36,12 +36,12 @@ func (w *Worker) Start() {
 		for {
 			// register the current worker into the worker queue
 			w.WorkerPool <- w.JobChannel
-			if Debug {
-				log.Printf("[RUNNING] queue size %d, pool size %d", len(JobQueue), len(w.WorkerPool))
-			}
 			select {
 			case job := <-w.JobChannel:
 				start := time.Now()
+				if Debug {
+					log.Printf("[RUNNING] queue size %d, pool size %d", len(JobQueue), len(w.WorkerPool))
+				}
 				if err := job.Do(); err != nil {
 					log.Printf("[ERROR] %s\n", err.Error())
 				}
