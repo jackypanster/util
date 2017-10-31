@@ -43,7 +43,7 @@ func (w *Worker) Start() {
 					log.Printf("[ERROR] %s\n", err.Error())
 				}
 				if Debug {
-					log.Printf("[WORKER %d] cost %s", w.id, time.Now().Sub(start))
+					log.Printf("[WORKER] %d spends %s", w.id, time.Now().Sub(start))
 				}
 			case <-w.quit:
 				// we have received a signal to stop
