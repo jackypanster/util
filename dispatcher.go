@@ -15,6 +15,7 @@ func (d *Dispatcher) Run() {
 	// starting n number of workers
 	for i := 0; i < d.maxWorkers; i++ {
 		worker := NewWorker(d.workerPool)
+		worker.SetId(i)
 		worker.Start()
 	}
 	go d.dispatch()

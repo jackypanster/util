@@ -12,6 +12,7 @@ type Worker struct {
 	WorkerPool chan chan Job
 	JobChannel chan Job
 	quit       chan bool
+	id         int
 }
 
 func NewWorker(workerPool chan chan Job) Worker {
@@ -22,6 +23,10 @@ func NewWorker(workerPool chan chan Job) Worker {
 	}
 }
 
+func (w Worker) SetId(num int) {
+	w.id = num
+}
+
 // Start method starts the run loop for the worker, listening for a quit channel in case we need to stop it
 func (w Worker) Start() {
 	go func() {
@@ -30,9 +35,11 @@ func (w Worker) Start() {
 			w.WorkerPool <- w.JobChannel
 			select {
 			case job := <-w.JobChannel:
+				log.Printf("[Worker %d] starts", w.id)
 				if err := job.Do(); err != nil {
 					log.Printf("[ERROR] %s\n", err.Error())
 				}
+				log.Printf("[Worker %d] ends", w.id)
 			case <-w.quit:
 				// we have received a signal to stop
 				return
