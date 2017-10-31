@@ -6,17 +6,22 @@ import (
 )
 
 func main() {
-	done := make(chan bool)
+	done := make(chan bool, 256)
 
-	util.SetDebug(false)
+	util.SetDebug(true)
 	util.InitQueue(16, 1024)
-	util.JobQueue <- util.Job{
-		Do: func() error {
-			log.Println("testing")
-			done <- true
-			return nil
-		},
+
+	for i := 0; i < 256; i ++ {
+		util.JobQueue <- util.Job{
+			Do: func() error {
+				log.Println("testing")
+				done <- true
+				return nil
+			},
+		}
 	}
 
-	<-done
+	for i := 0; i < 256; i ++ {
+		<-done
+	}
 }

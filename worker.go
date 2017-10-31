@@ -15,20 +15,20 @@ type Worker struct {
 	id         int
 }
 
-func NewWorker(workerPool chan chan Job) Worker {
-	return Worker{
+func NewWorker(workerPool chan chan Job) *Worker {
+	return &Worker{
 		WorkerPool: workerPool,
 		JobChannel: make(chan Job),
 		quit:       make(chan bool),
 	}
 }
 
-func (w Worker) SetId(num int) {
+func (w *Worker) SetId(num int) {
 	w.id = num
 }
 
 // Start method starts the run loop for the worker, listening for a quit channel in case we need to stop it
-func (w Worker) Start() {
+func (w *Worker) Start() {
 	go func() {
 		for {
 			// register the current worker into the worker queue
@@ -53,7 +53,7 @@ func (w Worker) Start() {
 }
 
 // Stop method signals the worker to stop listening for work requests
-func (w Worker) Stop() {
+func (w *Worker) Stop() {
 	go func() {
 		w.quit <- true
 	}()
