@@ -8,12 +8,12 @@ import (
 
 func main() {
 	start := time.Now()
-	done := make(chan bool, 32)
+	done := make(chan bool, 65536)
 
 	util.SetDebug(true)
-	util.InitQueue(16, 1024)
+	util.InitQueue(8, 128)
 
-	for i := 1; i <= 32; i ++ {
+	for i := 1; i <= 65536; i ++ {
 		item := i
 		util.JobQueue <- util.Job{
 			Do: func() error {
@@ -26,7 +26,7 @@ func main() {
 		log.Printf("JobQueue %d", len(util.JobQueue))
 	}
 
-	for i := 0; i < 32; i ++ {
+	for i := 0; i < 65536; i ++ {
 		<-done
 	}
 	log.Printf("complete %s", time.Now().Sub(start))
