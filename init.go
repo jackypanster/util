@@ -1,18 +1,10 @@
 package util
 
-import (
-	"log"
-	"io/ioutil"
-)
-
 var JobQueue chan Job
-var debug = false
+var Debug = false
 
-func SetDebug(enable bool) {
-	debug = enable
-	if !debug {
-		log.SetOutput(ioutil.Discard)
-	}
+func SetDebug(debug bool) {
+	Debug = debug
 }
 
 func InitQueue(maxWorkers int, queueSize int) {

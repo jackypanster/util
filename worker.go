@@ -35,11 +35,15 @@ func (w Worker) Start() {
 			w.WorkerPool <- w.JobChannel
 			select {
 			case job := <-w.JobChannel:
-				log.Printf("[Worker %d] starts", w.id)
+				if Debug {
+					log.Printf("[Worker %d] starts", w.id)
+				}
 				if err := job.Do(); err != nil {
 					log.Printf("[ERROR] %s\n", err.Error())
 				}
-				log.Printf("[Worker %d] ends", w.id)
+				if Debug {
+					log.Printf("[Worker %d] ends", w.id)
+				}
 			case <-w.quit:
 				// we have received a signal to stop
 				return
