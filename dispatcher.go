@@ -20,9 +20,6 @@ func (d *Dispatcher) Run() {
 		worker.SetId(i)
 		worker.Start()
 	}
-	if Debug {
-		log.Printf("[INIT] Queue size %d, Pool size %d", len(JobQueue), len(d.workerPool))
-	}
 	go d.dispatch()
 }
 
@@ -34,7 +31,7 @@ func (d *Dispatcher) dispatch() {
 			// try to obtain a worker job channel that is available
 			// this will block until a worker is idle
 			if Debug {
-				log.Printf("[RUNNING] queue size %d, pool size %d", len(JobQueue), len(d.workerPool))
+				log.Printf("[RUNNING] Jobs left %d; Available workers %d", len(JobQueue), len(d.workerPool))
 			}
 			go func(job Job) {
 				jobChannel := <-d.workerPool
