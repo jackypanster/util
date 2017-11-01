@@ -4,9 +4,18 @@ import (
 	"github.com/jackypanster/util"
 	"time"
 	"log"
+	"os"
 )
 
 func main() {
+	f, err := os.OpenFile("log/testlogfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+	log.SetOutput(f)
+	log.Println("This is a test log entry")
+
 	start := time.Now()
 	done := make(chan bool, 64)
 
@@ -18,12 +27,12 @@ func main() {
 		util.JobQueue <- util.Job{
 			Do: func() error {
 				log.Printf("sleep %d sec", item)
-				time.Sleep(time.Second * time.Duration(item))
+				time.Sleep(time.Millisecond * time.Duration(item))
 				done <- true
 				return nil
 			},
 		}
-		//log.Printf("JobQueue %d", len(util.JobQueue))
+		log.Printf("JobQueue %d", len(util.JobQueue))
 	}
 
 	for i := 0; i < 64; i ++ {
