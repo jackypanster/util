@@ -27,7 +27,7 @@ func (d *Dispatcher) Run() {
 
 func (d *Dispatcher) dispatch() {
 	for {
-		log.WithFields(log.Fields{"component": "util",}).Debugf("jobs left %d; available workers remain %d", len(JobQueue), len(d.workerPool))
+		log.WithFields(log.Fields{"component": "goroutine",}).Debugf("jobs left %d; available workers remain %d", len(JobQueue), len(d.workerPool))
 		select {
 		// a job request has been received
 		case job := <-JobQueue:
