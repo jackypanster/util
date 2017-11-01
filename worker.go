@@ -1,7 +1,7 @@
 package util
 
 import (
-	"log"
+	log "github.com/Sirupsen/logrus"
 	"time"
 )
 
@@ -40,11 +40,9 @@ func (w *Worker) Start() {
 			case job := <-w.JobChannel:
 				start := time.Now()
 				if err := job.Do(); err != nil {
-					log.Printf("[ERROR] %s\n", err.Error())
+					log.Errorf("%s\n", err.Error())
 				}
-				if Debug {
-					log.Printf("[WORKER] %d spends %s", w.id, time.Now().Sub(start))
-				}
+				log.Debugf("Worker.%d spends %s", w.id, time.Now().Sub(start))
 			case <-w.quit:
 				// we have received a signal to stop
 				return

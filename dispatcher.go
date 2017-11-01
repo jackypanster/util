@@ -1,6 +1,8 @@
 package util
 
-import "log"
+import (
+	log "github.com/Sirupsen/logrus"
+)
 
 type Dispatcher struct {
 	// A pool of workers channels that are registered with the dispatcher
@@ -25,14 +27,12 @@ func (d *Dispatcher) Run() {
 
 func (d *Dispatcher) dispatch() {
 	for {
+		log.Debugf("Jobs left %d; Available workers %d", len(JobQueue), len(d.workerPool))
 		select {
 		// a job request has been received
 		case job := <-JobQueue:
 			// try to obtain a worker job channel that is available
 			// this will block until a worker is idle
-			if Debug {
-				log.Printf("[RUNNING] Jobs left %d; Available workers %d", len(JobQueue), len(d.workerPool))
-			}
 			go func(job Job) {
 				jobChannel := <-d.workerPool
 				// dispatch the job to the worker job channel
