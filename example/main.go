@@ -1,20 +1,27 @@
 package main
 
 import (
+	log "github.com/Sirupsen/logrus"
 	"github.com/jackypanster/util"
 	"time"
-	"log"
 	"os"
+	"fmt"
 )
 
 func main() {
-	f, err := os.OpenFile("log/testlogfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	var filename = "log/logfile.log"
+	// Create the log file if doesn't exist. And append to it if it already exists.
+	f, err := os.OpenFile(filename, os.O_WRONLY | os.O_APPEND | os.O_CREATE, 0644)
+	Formatter := new(log.JSONFormatter)
+	Formatter.TimestampFormat = "02-01-2006 15:04:05"
+	log.SetFormatter(Formatter)
 	if err != nil {
-		log.Fatalf("error opening file: %v", err)
+		// Cannot open log file. Logging to stderr
+		fmt.Println(err)
+	}else{
+		log.SetOutput(f)
 	}
-	defer f.Close()
-	log.SetOutput(f)
-	log.Println("This is a test log entry")
+	log.SetLevel(log.WarnLevel)
 
 	start := time.Now()
 	done := make(chan bool, 64)
@@ -26,17 +33,18 @@ func main() {
 		item := i
 		util.JobQueue <- util.Job{
 			Do: func() error {
-				log.Printf("sleep %d sec", item)
 				time.Sleep(time.Millisecond * time.Duration(item))
 				done <- true
 				return nil
 			},
 		}
-		log.Printf("JobQueue %d", len(util.JobQueue))
 	}
 
 	for i := 0; i < 64; i ++ {
 		<-done
 	}
-	log.Printf("complete %s", time.Now().Sub(start))
+	log.WithFields(log.Fields{
+		"animal": "walrus",
+		"size":   10,
+	}).Warnf("complete %s", time.Now().Sub(start))
 }
