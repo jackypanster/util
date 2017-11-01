@@ -11,22 +11,22 @@ import (
 func main() {
 	var filename = "log/logfile.log"
 	// Create the log file if doesn't exist. And append to it if it already exists.
-	f, err := os.OpenFile(filename, os.O_WRONLY | os.O_APPEND | os.O_CREATE, 0644)
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
 	Formatter := new(log.JSONFormatter)
-	Formatter.TimestampFormat = "02-01-2006 15:04:05"
+	//Formatter.TimestampFormat = "02-01-2006 15:04:05"
 	log.SetFormatter(Formatter)
 	if err != nil {
 		// Cannot open log file. Logging to stderr
 		fmt.Println(err)
-	}else{
+	} else {
 		log.SetOutput(f)
 	}
-	log.SetLevel(log.WarnLevel)
+	defer f.Close()
+	log.SetLevel(log.DebugLevel)
 
 	start := time.Now()
 	done := make(chan bool, 64)
 
-	util.SetDebug(true)
 	util.InitQueue(128, 64)
 
 	for i := 1; i <= 64; i ++ {
