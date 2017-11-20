@@ -45,9 +45,9 @@ func (service *Service) Find(tab *mgo.Collection, id string, result interface{})
     return nil
   }
 
-  err := tab.Find(bson.M{"id": id}).One(&result)
+  err := tab.Find(bson.M{"id": id}).One(result)
   if err == nil {
-    service.cache[id] = &result
+    service.cache[id] = result
     log.Printf("store %+v", result)
   }
   return err
