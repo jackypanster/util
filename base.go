@@ -39,7 +39,8 @@ func (service *Service) RemoveAll(tab *mgo.Collection) error {
 }
 
 func (service *Service) Find(tab *mgo.Collection, id string, result interface{}) error {
-  if result, ok := service.cache[id]; ok {
+  if val, ok := service.cache[id]; ok {
+    result = val
     log.Printf("cache %+v", result)
     return nil
   }
