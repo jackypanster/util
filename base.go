@@ -52,12 +52,17 @@ func (service *Service) Find(tab *mgo.Collection, id string, result interface{})
   return err
 }
 
-func (service *Service) FindByDuration(tab *mgo.Collection, start string, end string, size int, results []interface{}) error {
-  from := ConvertTimestamp(start)
-  to := ConvertTimestamp(end)
-  return tab.Find(bson.M{"timestamp": bson.M{"$gte": from, "lt": to}}).Sort("-timestamp").Limit(size).All(results)
+func (service *Service) Update(tab *mgo.Collection, id string, selector interface{}, update interface{}, target interface{}) error {
+  service.cache[id] = target
+  return tab.Update(selector, update)
 }
 
-func (service *Service) All(tab *mgo.Collection, size int, results []interface{}) error {
-  return tab.Find(bson.M{}).Sort("-timestamp").Limit(size).All(results)
+func (service *Service) FindByDuration(tab *mgo.Collection, start string, end string, size int, result interface{}) error {
+  from := ConvertTimestamp(start)
+  to := ConvertTimestamp(end)
+  return tab.Find(bson.M{"timestamp": bson.M{"$gte": from, "lt": to}}).Sort("-timestamp").Limit(size).All(result)
+}
+
+func (service *Service) All(tab *mgo.Collection, size int, result interface{}) error {
+  return tab.Find(bson.M{}).Sort("-timestamp").Limit(size).All(result)
 }
