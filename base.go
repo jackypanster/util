@@ -21,19 +21,27 @@ func NewService() *Service {
 	}
 }
 
-func (service *Service) Insert(tab *mgo.Collection, id string, doc interface{}) error {
-	service.cache[id] = doc
-	return tab.Insert(doc)
+func (service *Service) Insert(tab *mgo.Collection, id string, doc interface{}) (interface{}, error) {
+	err := tab.Insert(doc)
+	if err == nil {
+		service.cache[id] = doc
+	}
+	return service.cache[id], err
 }
 
 func (service *Service) Remove(tab *mgo.Collection, id string) error {
-	delete(service.cache, id)
-	return tab.Remove(bson.M{"id": id})
+	err := tab.Remove(bson.M{"id": id})
+	if err == nil {
+		delete(service.cache, id)
+	}
+	return err
 }
 
 func (service *Service) RemoveAll(tab *mgo.Collection) error {
-	service.cache = make(map[string]interface{})
 	_, err := tab.RemoveAll(nil)
+	if err == nil {
+		service.cache = make(map[string]interface{})
+	}
 	return err
 }
 
@@ -51,8 +59,11 @@ func (service *Service) Find(tab *mgo.Collection, id string) (interface{}, error
 }
 
 func (service *Service) Update(tab *mgo.Collection, id string, selector interface{}, update interface{}, doc interface{}) error {
-	service.cache[id] = doc
-	return tab.Update(selector, update)
+	err := tab.Update(selector, update)
+	if err == nil {
+		service.cache[id] = doc
+	}
+	return err
 }
 
 func (service *Service) FindByTimestamp(tab *mgo.Collection, start string, end string, size int) (interface{}, error) {
