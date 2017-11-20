@@ -39,8 +39,8 @@ func (service *Service) RemoveAll(tab *mgo.Collection) error {
 }
 
 func (service *Service) Find(tab *mgo.Collection, id string) (interface{}, error) {
-  if _, ok := service.cache[id]; ok {
-    log.Printf("cache %+v", service.cache[id])
+  if val, ok := service.cache[id]; ok {
+    log.Printf("cache %+v", val)
     return service.cache[id], nil
   }
 
@@ -48,7 +48,7 @@ func (service *Service) Find(tab *mgo.Collection, id string) (interface{}, error
   err := tab.Find(bson.M{"id": id}).One(&result)
   if err == nil {
     service.cache[id] = &result
-    log.Printf("store %+v", service.cache[id])
+    log.Printf("store %+v", result)
   }
   return service.cache[id], err
 }
