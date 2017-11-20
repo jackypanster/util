@@ -22,38 +22,27 @@ func NewEntityService() *EntityService {
   }
 }
 
-func (self *EntityService) FindById(tab *mgo.Collection, id string, result interface{}) (error) {
+func (self *EntityService) FindById(tab *mgo.Collection, id string, result interface{}) error {
   if val, ok := self.cache[id]; ok {
     result = val
     log.Printf("cache %+v", val)
     return nil
   }
 
-  if err := tab.Find(bson.M{"id": id}).One(result); err != nil {
-    return err
-  }
-  log.Printf("db %+v", result)
+  err := tab.Find(bson.M{"id": id}).One(result)
   self.cache[id] = result
-  log.Printf("db %+v", self.cache[id])
-  return nil
+  log.Printf("store %+v", self.cache[id])
+
+  return err
 }
 
-func (self *EntityService) FindByDuration(tab *mgo.Collection, start string, end string, size int) ([]*Entity, error) {
-
-  var entities []*Entity
-  var err error
-
+func (self *EntityService) FindByDuration(tab *mgo.Collection, start string, end string, size int, results []interface{}) error {
   from := ConvertTimestamp(start)
   to := ConvertTimestamp(end)
 
-  err = tab.Find(bson.M{"timestamp": bson.M{"$gte": from, "lt": to}}).Sort("-timestamp").Limit(size).All(&entities)
-  return entities, err
+  return tab.Find(bson.M{"timestamp": bson.M{"$gte": from, "lt": to}}).Sort("-timestamp").Limit(size).All(results)
 }
 
-func (self *EntityService) All(tab *mgo.Collection, size int) ([]*Entity, error) {
-  var entities []*Entity
-  var err error
-
-  err = tab.Find(bson.M{}).Sort("-timestamp").Limit(size).All(&entities)
-  return entities, err
+func (self *EntityService) All(tab *mgo.Collection, size int, results []interface{}) error {
+  return tab.Find(bson.M{}).Sort("-timestamp").Limit(size).All(results)
 }
