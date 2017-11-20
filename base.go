@@ -58,12 +58,12 @@ func (service *Service) Find(tab *mgo.Collection, id string) (interface{}, error
 	return service.cache[id], err
 }
 
-func (service *Service) Update(tab *mgo.Collection, id string, selector interface{}, update interface{}, doc interface{}) error {
+func (service *Service) Update(tab *mgo.Collection, id string, selector interface{}, update interface{}, doc interface{}) (interface{}, error) {
 	err := tab.Update(selector, update)
 	if err == nil {
 		service.cache[id] = doc
 	}
-	return err
+	return service.cache[id], err
 }
 
 func (service *Service) FindByTimestamp(tab *mgo.Collection, start string, end string, size int) (interface{}, error) {
