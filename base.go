@@ -40,7 +40,7 @@ func (service *Service) RemoveAll(tab *mgo.Collection) error {
 
 func (service *Service) Find(tab *mgo.Collection, id string, result interface{}) error {
   if val, ok := service.cache[id]; ok {
-    result = val
+    result = &val
     log.Printf("cache %+v", result)
     return nil
   }
