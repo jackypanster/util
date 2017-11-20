@@ -27,7 +27,7 @@ func (service *Service) Insert(tab *mgo.Collection, id string, doc interface{}) 
   return tab.Insert(doc)
 }
 
-func (service *Service) Remove(tab *mgo.Collection, id string, doc interface{}) error {
+func (service *Service) Remove(tab *mgo.Collection, id string) error {
   delete(service.cache, id)
   return tab.Remove(bson.M{"id": id})
 }
