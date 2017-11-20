@@ -58,7 +58,7 @@ func (service *Service) Update(tab *mgo.Collection, id string, selector interfac
 func (service *Service) FindByTimestamp(tab *mgo.Collection, start string, end string, size int, result interface{}) error {
   from := ConvertTimestamp(start)
   to := ConvertTimestamp(end)
-  return tab.Find(bson.M{"timestamp": bson.M{"$gte": from, "lt": to}}).Sort("-timestamp").Limit(size).All(result)
+  return tab.Find(bson.M{"timestamp": bson.M{"$gte": from, "$lt": to}}).Sort("-timestamp").Limit(size).All(result)
 }
 
 func (service *Service) All(tab *mgo.Collection, size int, result interface{}) error {
