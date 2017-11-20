@@ -1,6 +1,7 @@
 package util
 
 import (
+  "log"
   "time"
   "gopkg.in/mgo.v2"
   "gopkg.in/mgo.v2/bson"
@@ -12,26 +13,29 @@ type Entity struct {
 }
 
 type EntityService struct {
-  cache map[string]*Entity
+  cache map[string]interface{}
 }
 
 func NewEntityService() *EntityService {
   return &EntityService{
-    cache: make(map[string]*Entity),
+    cache: make(map[string]interface{}),
   }
 }
 
-func (self *EntityService) FindById(tab *mgo.Collection, id string) (*Entity, error) {
+func (self *EntityService) FindById(tab *mgo.Collection, id string, result interface{}) (error) {
   if val, ok := self.cache[id]; ok {
-    return val, nil
+    result = val
+    log.Printf("cache %+v", val)
+    return nil
   }
 
-  var entity Entity
-  if err := tab.Find(bson.M{"id": id}).One(&entity); err != nil {
-    return nil, err
+  if err := tab.Find(bson.M{"id": id}).One(&result); err != nil {
+    return err
   }
-  self.cache[entity.ID] = &entity
-  return &entity, nil
+  log.Printf("db %+v", result)
+  self.cache[id] = result
+  log.Printf("db %+v", self.cache[id])
+  return nil
 }
 
 func (self *EntityService) FindByDuration(tab *mgo.Collection, start string, end string, size int) ([]*Entity, error) {
