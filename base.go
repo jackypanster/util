@@ -8,6 +8,7 @@ import (
 
 type Entity struct {
 	ID        string    `json:"id" bson:"id"`
+	Date      string    `json:"date" bson:"date"`
 	Timestamp time.Time `json:"timestamp" bson:"timestamp"`
 }
 
@@ -64,6 +65,12 @@ func (service *Service) Update(tab *mgo.Collection, id string, selector interfac
 		service.cache[id] = doc
 	}
 	return service.cache[id], err
+}
+
+func (service *Service) FindByDate(tab *mgo.Collection, date string, size int) (interface{}, error) {
+	var results []interface{}
+	err := tab.Find(bson.M{"date": date}).Sort("-timestamp").Limit(size).All(&results)
+	return results, err
 }
 
 func (service *Service) FindByTimestamp(tab *mgo.Collection, start string, end string, size int) (interface{}, error) {
