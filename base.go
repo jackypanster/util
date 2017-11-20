@@ -38,19 +38,19 @@ func (service *Service) RemoveAll(tab *mgo.Collection) error {
   return err
 }
 
-func (service *Service) Find(tab *mgo.Collection, id string, result interface{}) (error) {
+func (service *Service) Find(tab *mgo.Collection, id string) (interface{}, error) {
   if _, ok := service.cache[id]; ok {
-    result = service.cache[id]
-    log.Printf("cache %+v", result)
-    return nil
+    log.Printf("cache %+v", service.cache[id])
+    return service.cache[id], nil
   }
 
-  err := tab.Find(bson.M{"id": id}).One(result)
+  var result interface{}
+  err := tab.Find(bson.M{"id": id}).One(&result)
   if err == nil {
-    service.cache[id] = result
-    log.Printf("store %+v", result)
+    service.cache[id] = &result
+    log.Printf("store %+v", service.cache[id])
   }
-  return err
+  return service.cache[id], err
 }
 
 func (service *Service) Update(tab *mgo.Collection, id string, selector interface{}, update interface{}, target interface{}) error {
