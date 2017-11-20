@@ -29,7 +29,7 @@ func (self *EntityService) FindById(tab *mgo.Collection, id string, result inter
     return nil
   }
 
-  if err := tab.Find(bson.M{"id": id}).One(&result); err != nil {
+  if err := tab.Find(bson.M{"id": id}).One(result); err != nil {
     return err
   }
   log.Printf("db %+v", result)
