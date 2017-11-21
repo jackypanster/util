@@ -14,7 +14,7 @@ type Entity struct {
 }
 
 type Operator interface {
-	All(interface{}) error
+	All() (interface{}, error)
 	Find(string) (interface{}, error)
 	Remove(string) error
 	Empty() error
@@ -78,28 +78,20 @@ func (service *Service) Update(tab *mgo.Collection, id string, selector interfac
 	return service.cache[id], err
 }
 
-func (service *Service) FindByDate(tab *mgo.Collection, date string, size int) (interface{}, error) {
-	var results []interface{}
-	err := tab.Find(bson.M{"date": date}).Sort("-timestamp").Limit(size).All(&results)
-	return results, err
+func (service *Service) FindByDate(tab *mgo.Collection, date string, size int, results interface{}) error {
+	return tab.Find(bson.M{"date": date}).Sort("-timestamp").Limit(size).All(results)
 }
 
-func (service *Service) FindByName(tab *mgo.Collection, name string, size int) (interface{}, error) {
-	var results []interface{}
-	err := tab.Find(bson.M{"name": name}).Sort("-timestamp").Limit(size).All(&results)
-	return results, err
+func (service *Service) FindByName(tab *mgo.Collection, name string, size int, results interface{}) error {
+	return tab.Find(bson.M{"name": name}).Sort("-timestamp").Limit(size).All(results)
 }
 
-func (service *Service) FindByTimestamp(tab *mgo.Collection, start string, end string, size int) (interface{}, error) {
+func (service *Service) FindByTimestamp(tab *mgo.Collection, start string, end string, size int, results interface{}) error {
 	from := ConvertTimestamp(start)
 	to := ConvertTimestamp(end)
-	var results []interface{}
-	err := tab.Find(bson.M{"timestamp": bson.M{"$gte": from, "$lt": to}}).Sort("-timestamp").Limit(size).All(&results)
-	return results, err
+	return tab.Find(bson.M{"timestamp": bson.M{"$gte": from, "$lt": to}}).Sort("-timestamp").Limit(size).All(results)
 }
 
 func (service *Service) All(tab *mgo.Collection, size int, results interface{}) error {
-	//var results []interface{}
-	err := tab.Find(bson.M{}).Sort("-timestamp").Limit(size).All(results)
-	return err
+	return tab.Find(bson.M{}).Sort("-timestamp").Limit(size).All(results)
 }
