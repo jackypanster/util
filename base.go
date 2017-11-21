@@ -15,6 +15,7 @@ type Entity struct {
 
 type Operator interface {
 	All(interface{}) error
+	Insert(interface{}) error
 	Update(interface{}, interface{}) error
 	Remove(string) error
 	Empty() error
@@ -30,7 +31,7 @@ func NewService() *Service {
 	return &Service{}
 }
 
-func (service *Service) Insert(tab *mgo.Collection, id string, doc interface{}) error {
+func (service *Service) Insert(tab *mgo.Collection, doc interface{}) error {
 	return tab.Insert(doc)
 }
 
