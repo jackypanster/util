@@ -98,8 +98,8 @@ func (service *Service) FindByTimestamp(tab *mgo.Collection, start string, end s
 	return results, err
 }
 
-func (service *Service) All(tab *mgo.Collection, size int) (interface{}, error) {
-	var results []interface{}
-	err := tab.Find(bson.M{}).Sort("-timestamp").Limit(size).All(&results)
-	return results, err
+func (service *Service) All(tab *mgo.Collection, size int, results interface{}) error {
+	//var results []interface{}
+	err := tab.Find(bson.M{}).Sort("-timestamp").Limit(size).All(results)
+	return err
 }
