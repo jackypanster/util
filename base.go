@@ -13,6 +13,16 @@ type Entity struct {
 	Timestamp time.Time `json:"timestamp" bson:"timestamp"`
 }
 
+type Operator interface {
+	All() (interface{}, error)
+	Find(string) (interface{}, error)
+	Remove(string) error
+	Empty() error
+	FindByDate(string) (interface{}, error)
+	FindByName(string) (interface{}, error)
+	FindByTimestamp(string, string) (interface{}, error)
+}
+
 type Service struct {
 	cache map[string]interface{}
 }
