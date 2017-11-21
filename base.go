@@ -14,7 +14,7 @@ type Entity struct {
 }
 
 type Operator interface {
-	All() (interface{}, error)
+	All(interface{}) error
 	Find(string) (interface{}, error)
 	Remove(string) error
 	Empty() error
