@@ -20,6 +20,9 @@ type Operator interface {
 	Remove(string) error
 	Empty() error
 	Find(string, interface{}) error
+	FindByDate(string, interface{}) error
+	FindByName(string, interface{}) error
+	FindByTimestamp(string, string, interface{}) error
 	Search(interface{}, interface{}) error
 }
 
