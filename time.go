@@ -1,14 +1,22 @@
 package util
 
 import (
-  "strconv"
-  "time"
+	"strconv"
+	"time"
 )
 
 func ConvertTimestamp(timestamp string) time.Time {
-  i, err := strconv.ParseInt(timestamp, 10, 64)
-  if err != nil {
-    panic(err)
-  }
-  return time.Unix(0, i*int64(time.Millisecond))
+	i, err := strconv.ParseInt(timestamp, 10, 64)
+	if err != nil {
+		panic(err)
+	}
+	return time.Unix(0, i*int64(time.Millisecond))
+}
+
+func ConvertDateString(date string) int64 {
+	t, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		panic(err)
+	}
+	return t.Unix()
 }
