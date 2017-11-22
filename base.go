@@ -23,51 +23,101 @@ type Operator interface {
 	Search(interface{}, interface{}) error
 }
 
-type Service struct{}
-
-func NewService() *Service {
-	return &Service{}
+type Service struct {
+	session  *mgo.Session
+	database string
+	table    string
+	limit    int
 }
 
-func (service *Service) Insert(tab *mgo.Collection, doc interface{}) error {
-	return tab.Insert(doc)
+func NewService(session *mgo.Session, database string, table string, size int) *Service {
+	return &Service{
+		session:  session,
+		database: database,
+		table:    table,
+		limit:    size,
+	}
 }
 
-func (service *Service) Remove(tab *mgo.Collection, id string) error {
-	return tab.Remove(bson.M{"id": id})
+func (self *Service) Insert(doc interface{}) error {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
+	return c.Insert(doc)
 }
 
-func (service *Service) RemoveAll(tab *mgo.Collection) error {
-	_, err := tab.RemoveAll(nil)
+func (self *Service) Remove(id string) error {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
+	return c.Remove(bson.M{"id": id})
+}
+
+func (self *Service) Empty() error {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
+	_, err := c.RemoveAll(nil)
 	return err
 }
 
-func (service *Service) Find(tab *mgo.Collection, id string, result interface{}) error {
-	return tab.Find(bson.M{"id": id}).One(result)
+func (self *Service) Find(id string, result interface{}) error {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
+	return c.Find(bson.M{"id": id}).One(result)
 }
 
-func (service *Service) Update(tab *mgo.Collection, selector interface{}, update interface{}) error {
-	return tab.Update(selector, update)
+func (self *Service) Update(selector interface{}, update interface{}) error {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
+	return c.Update(selector, update)
 }
 
-func (service *Service) FindByDate(tab *mgo.Collection, date string, size int, results interface{}) error {
-	return tab.Find(bson.M{"date": date}).Sort("-timestamp").Limit(size).All(results)
+func (self *Service) FindByDate(date string, results interface{}) error {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
+	return c.Find(bson.M{"date": date}).Sort("-timestamp").Limit(self.limit).All(results)
 }
 
-func (service *Service) FindByName(tab *mgo.Collection, name string, size int, results interface{}) error {
-	return tab.Find(bson.M{"name": name}).Sort("-timestamp").Limit(size).All(results)
+func (self *Service) FindByName(name string, results interface{}) error {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
+	return c.Find(bson.M{"name": name}).Sort("-timestamp").Limit(self.limit).All(results)
 }
 
-func (service *Service) FindByTimestamp(tab *mgo.Collection, start string, end string, size int, results interface{}) error {
+func (self *Service) FindByTimestamp(start string, end string, results interface{}) error {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
 	from := ConvertTimestamp(start)
 	to := ConvertTimestamp(end)
-	return tab.Find(bson.M{"timestamp": bson.M{"$gte": from, "$lt": to}}).Sort("-timestamp").Limit(size).All(results)
+	return c.Find(bson.M{"timestamp": bson.M{"$gte": from, "$lt": to}}).Sort("-timestamp").Limit(self.limit).All(results)
 }
 
-func (service *Service) All(tab *mgo.Collection, size int, results interface{}) error {
-	return tab.Find(bson.M{}).Sort("-timestamp").Limit(size).All(results)
+func (self *Service) All(results interface{}) error {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
+	return c.Find(bson.M{}).Sort("-timestamp").Limit(self.limit).All(results)
 }
 
-func (service *Service) Search(tab *mgo.Collection, size int, query interface{}, results interface{}) error {
-	return tab.Find(query).Sort("-timestamp").Limit(size).All(results)
+func (self *Service) Search(query interface{}, results interface{}) error {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
+	return c.Find(query).Sort("-timestamp").Limit(self.limit).All(results)
 }
