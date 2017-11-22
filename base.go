@@ -23,6 +23,7 @@ type Operator interface {
 	FindByDate(string, interface{}) error
 	FindByName(string, interface{}) error
 	FindByTimestamp(string, string, interface{}) error
+	Search(interface{}, interface{}) error
 }
 
 type Service struct{}
@@ -68,4 +69,8 @@ func (service *Service) FindByTimestamp(tab *mgo.Collection, start string, end s
 
 func (service *Service) All(tab *mgo.Collection, size int, results interface{}) error {
 	return tab.Find(bson.M{}).Sort("-timestamp").Limit(size).All(results)
+}
+
+func (service *Service) Search(tab *mgo.Collection, size int, query interface{}, results interface{}) error {
+	return tab.Find(query).Sort("-timestamp").Limit(size).All(results)
 }
