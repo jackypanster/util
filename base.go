@@ -23,6 +23,7 @@ type Operator interface {
 	FindByDate(string, interface{}) error
 	FindByName(string, interface{}) error
 	FindByTimestamp(string, string, interface{}) error
+	FindOne(interface{}, interface{}) error
 	Search(interface{}, interface{}) error
 }
 
@@ -123,4 +124,12 @@ func (self *Service) Search(query interface{}, results interface{}) error {
 	c := s.DB(self.database).C(self.table)
 
 	return c.Find(query).Sort("-timestamp").Limit(self.limit).All(results)
+}
+
+func (self *Service) FindOne(query interface{}, result interface{}) error {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
+	return c.Find(query).One(result)
 }
