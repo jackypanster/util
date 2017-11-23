@@ -11,11 +11,15 @@ import (
 
 func Post(targetUrl string, content string) (string, error) {
 	request := gorequest.New()
-	resp, body, errs := request.Post(targetUrl).
-		Send(content).
+	resp, body, errs := request.Post(targetUrl).Send(content).
 		Retry(3, 7*time.Second, http.StatusBadRequest, http.StatusInternalServerError).End()
-
 	return setupResp(content, resp, body, errs)
+}
+func Get(targetUrl string) (string, error) {
+	request := gorequest.New()
+	resp, body, errs := request.Get(targetUrl).
+		Retry(3, 7*time.Second, http.StatusBadRequest, http.StatusInternalServerError).End()
+	return setupResp(targetUrl, resp, body, errs)
 }
 
 func setupResp(request string, response *http.Response, body string, errs []error) (string, error) {
