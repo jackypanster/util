@@ -15,6 +15,7 @@ func Post(targetUrl string, content string) (string, error) {
 		Retry(3, 7*time.Second, http.StatusBadRequest, http.StatusInternalServerError).End()
 	return setupResp(content, resp, body, errs)
 }
+
 func Get(targetUrl string) (string, error) {
 	request := gorequest.New()
 	resp, body, errs := request.Get(targetUrl).
@@ -25,7 +26,7 @@ func Get(targetUrl string) (string, error) {
 func setupResp(request string, response *http.Response, body string, errs []error) (string, error) {
 	if errs != nil {
 		var buffer bytes.Buffer
-		buffer.WriteString(fmt.Sprintf("fail to send request %s\n", request))
+		buffer.WriteString(fmt.Sprintf("fail to make HTTP request %s\n", request))
 		if len(errs) > 0 {
 			for err := range errs {
 				buffer.WriteString(fmt.Sprintf("%+v\n", err))
