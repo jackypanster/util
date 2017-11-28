@@ -10,9 +10,8 @@ func NewMongoSession(host string, port int) *mgo.Session {
 	// Connect to our local mongo
 	session, err := mgo.Dial(url)
 	// Check if connection error, is mongo running?
-	if err != nil {
-		panic(err)
-	}
+	CheckErr(err)
+
 	session.SetMode(mgo.Monotonic, true)
 	return session
 }

@@ -16,9 +16,7 @@ func NewRedisPool(host string, port int) *redis.Pool {
 		Wait:        true,
 		Dial: func() (redis.Conn, error) {
 			c, err := redis.Dial("tcp", hostPort)
-			if err != nil {
-				panic(fmt.Sprintf("fail to connect the redis server %s error %v\n", hostPort, err))
-			}
+			CheckErr(err)
 			return c, err
 		},
 		TestOnBorrow: func(c redis.Conn, t time.Time) error {

@@ -40,7 +40,7 @@ func (w *Worker) Start() {
 			case job := <-w.JobChannel:
 				start := time.Now()
 				if err := job.Do(); err != nil {
-					log.WithFields(log.Fields{"reason": err}).Error("error occurs")
+					log.WithFields(log.Fields{"exception": err}).Error("job failure")
 				}
 				log.Debugf("worker#%d spends %s", w.id, time.Now().Sub(start))
 			case <-w.quit:
