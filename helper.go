@@ -7,6 +7,9 @@ import (
 
 func CheckArray(values []string, name string) []string {
 	var results []string
+	if values == nil {
+		log.Panicf("%s should not be null", name)
+	}
 	if len(values) == 0 {
 		log.Panicf("%s should not be empty", name)
 	}
@@ -18,7 +21,7 @@ func CheckArray(values []string, name string) []string {
 		}
 	}
 	if len(m) == 0 {
-		log.Panicf("%s should not be empty", name)
+		log.Panicf("%s should not contain empty value", name)
 	}
 	for key := range m {
 		results = append(results, key)
