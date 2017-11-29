@@ -37,7 +37,7 @@ func CheckStr(value string, name string) string {
 	return str
 }
 
-func CheckBool(condition bool, description string) {
+func CheckCondition(condition bool, description string) {
 	if condition {
 		log.Panic(description)
 	}
