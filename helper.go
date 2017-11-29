@@ -48,3 +48,8 @@ func CheckErr(err error) {
 		log.Panicf("[ERROR] %+v", err)
 	}
 }
+func CheckErrf(err error, description string) {
+	if err != nil {
+		log.Panicf("[ERROR] %+v, %s", err, description)
+	}
+}
