@@ -1,7 +1,7 @@
 package util
 
 import (
-	"log"
+	log "github.com/Sirupsen/logrus"
 	"strings"
 	"fmt"
 )
