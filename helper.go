@@ -37,6 +37,12 @@ func CheckStr(value string, name string) string {
 	return str
 }
 
+func CheckBool(condition bool, description string) {
+	if condition {
+		log.Panic(description)
+	}
+}
+
 func CheckErr(err error) {
 	if err != nil {
 		log.Panicf("[ERROR] %+v", err)
