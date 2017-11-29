@@ -16,3 +16,7 @@ func ConvertDateString(date string) int64 {
 	CheckErr(err)
 	return t.Unix()
 }
+
+func GetNowMillionSecond() int64 {
+	return time.Now().UnixNano() / int64(time.Millisecond) //1000000
+}

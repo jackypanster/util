@@ -10,6 +10,7 @@ type Entity struct {
 	ID        string    `json:"id" bson:"id"`
 	Date      string    `json:"date" bson:"date"`
 	Name      string    `json:"name" bson:"name"`
+	Time      int64     `json:"time" bson:"time"`
 	Timestamp time.Time `json:"timestamp" bson:"timestamp"`
 }
 

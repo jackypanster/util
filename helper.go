@@ -3,26 +3,40 @@ package util
 import (
 	"log"
 	"strings"
+	"fmt"
 )
+
+func CheckMap(m map[string]string, name string) map[string]string {
+	result := make(map[string]string)
+
+	CheckCondition(m == nil, fmt.Sprintf("%s should not be null", name))
+	CheckCondition(len(m) == 0, fmt.Sprintf("%s should not be empty", name))
+
+	for k, v := range m {
+		key := CheckStr(k, "key")
+		val := CheckStr(v, "val")
+		result[key] = val
+	}
+
+	CheckCondition(len(result) == 0, fmt.Sprintf("%s should not be empty", name))
+
+	return result
+}
 
 func CheckArray(values []string, name string) []string {
 	var results []string
-	if values == nil {
-		log.Panicf("%s should not be null", name)
-	}
-	if len(values) == 0 {
-		log.Panicf("%s should not be empty", name)
-	}
+
+	CheckCondition(values == nil, fmt.Sprintf("%s should not be null", name))
+	CheckCondition(len(values) == 0, fmt.Sprintf("%s should not be empty", name))
+
 	m := make(map[string]int)
 	for _, value := range values {
-		str := strings.TrimSpace(value)
-		if len(str) > 0 {
-			m[str] = 0
-		}
+		str := CheckStr(value, "value")
+		m[str] = 0
 	}
-	if len(m) == 0 {
-		log.Panicf("%s should not contain empty value", name)
-	}
+
+	CheckCondition(len(m) == 0, fmt.Sprintf("%s should not be empty", name))
+
 	for key := range m {
 		results = append(results, key)
 	}
@@ -31,9 +45,7 @@ func CheckArray(values []string, name string) []string {
 
 func CheckStr(value string, name string) string {
 	str := strings.TrimSpace(value)
-	if len(str) == 0 {
-		log.Panicf("%s should not be empty", name)
-	}
+	CheckCondition(len(str) == 0, fmt.Sprintf("%s should not be empty", name))
 	return str
 }
 
@@ -44,12 +56,10 @@ func CheckCondition(condition bool, description string) {
 }
 
 func CheckErr(err error) {
-	if err != nil {
-		log.Panicf("[ERROR] %+v", err)
-	}
+	CheckErrf(err, "")
 }
 func CheckErrf(err error, description string) {
 	if err != nil {
-		log.Panicf("[ERROR] %+v, %s", err, description)
+		log.Panicf("[ERROR] %+v %s", err, description)
 	}
 }
