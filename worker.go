@@ -1,8 +1,9 @@
 package util
 
 import (
-	log "github.com/Sirupsen/logrus"
 	"time"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 // Job represents the job to be run
@@ -40,9 +41,9 @@ func (w *Worker) Start() {
 			case job := <-w.JobChannel:
 				start := time.Now()
 				if err := job.Do(); err != nil {
-					log.Errorf("worker#%d, error occurs %+v", w.id, err)
+					log.WithFields(log.Fields{"component": "core"}).Errorf("worker#%d, error occurs %+v", w.id, err)
 				}
-				log.Infof("worker#%d spends %s", w.id, time.Now().Sub(start))
+				log.WithFields(log.Fields{"component": "core"}).Infof("worker#%d spends %s", w.id, time.Now().Sub(start))
 			case <-w.quit:
 				// we have received a signal to stop
 				return
