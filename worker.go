@@ -43,7 +43,7 @@ func (w *Worker) Start() {
 				if err := job.Do(); err != nil {
 					log.WithFields(log.Fields{"component": "core"}).Errorf("worker#%d, error occurs %+v", w.id, err)
 				}
-				log.WithFields(log.Fields{"component": "core"}).Infof("worker#%d spends %s", w.id, time.Now().Sub(start))
+				log.WithFields(log.Fields{"component": "core"}).Debugf("worker#%d spends %s", w.id, time.Now().Sub(start))
 			case <-w.quit:
 				// we have received a signal to stop
 				return
