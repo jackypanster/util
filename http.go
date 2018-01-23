@@ -1,18 +1,25 @@
 package util
 
 import (
-	"github.com/parnurzeal/gorequest"
-	"time"
-	"net/http"
+	"bytes"
 	"errors"
 	"fmt"
-	"bytes"
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/parnurzeal/gorequest"
 )
 
-func Post(targetUrl string, content string) (string, error) {
+func Post(targetUrl string, content string, debug bool) (string, error) {
 	request := gorequest.New()
+	request.SetDebug(debug)
 	resp, body, errs := request.Post(targetUrl).Send(content).
 		Retry(3, 7*time.Second, http.StatusBadRequest, http.StatusInternalServerError).End()
+
+	if len(errs) > 0 {
+		log.Printf("error %+v\n", errs[0])
+	}
 	return setupResp(content, resp, body, errs)
 }
 
