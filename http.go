@@ -23,10 +23,11 @@ func Post(targetUrl string, content string, debug bool) (string, error) {
 	return setupResp(content, resp, body, errs)
 }
 
-func Get(targetUrl string) (string, error) {
-	request := gorequest.New()
+func Get(targetUrl string, debug bool) (string, error) {
+	request := gorequest.New().Timeout(200 * time.Millisecond)
+	request.SetDebug(debug)
 	resp, body, errs := request.Get(targetUrl).
-		Retry(3, 7*time.Second, http.StatusBadRequest, http.StatusInternalServerError).End()
+		Retry(1, 1*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
 	return setupResp(targetUrl, resp, body, errs)
 }
 
