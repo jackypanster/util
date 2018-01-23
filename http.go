@@ -17,7 +17,7 @@ func Post(targetUrl string, content string, debug bool) (string, error) {
 	resp, body, errs := request.Post(targetUrl).Send(content).
 		Retry(1, 1*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
 
-	if len(errs) > 0 {
+	if errs != nil && len(errs) > 0 {
 		log.Printf("error %+v\n", errs[0])
 	}
 	return setupResp(content, resp, body, errs)
@@ -28,6 +28,9 @@ func Get(targetUrl string, debug bool) (string, error) {
 	request.SetDebug(debug)
 	resp, body, errs := request.Get(targetUrl).
 		Retry(1, 1*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
+	if errs != nil && len(errs) > 0 {
+		log.Printf("error %+v\n", errs[0])
+	}
 	return setupResp(targetUrl, resp, body, errs)
 }
 
