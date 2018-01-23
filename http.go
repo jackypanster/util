@@ -12,10 +12,10 @@ import (
 )
 
 func Post(targetUrl string, content string, debug bool) (string, error) {
-	request := gorequest.New()
+	request := gorequest.New().Timeout(200 * time.Millisecond)
 	request.SetDebug(debug)
 	resp, body, errs := request.Post(targetUrl).Send(content).
-		Retry(3, 7*time.Second, http.StatusBadRequest, http.StatusInternalServerError).End()
+		Retry(1, 1*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
 
 	if len(errs) > 0 {
 		log.Printf("error %+v\n", errs[0])
