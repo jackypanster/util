@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
@@ -16,10 +15,6 @@ func Post(targetUrl string, content string, debug bool) (string, error) {
 	request.SetDebug(debug)
 	resp, body, errs := request.Post(targetUrl).Send(content).
 		Retry(1, 1*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
-
-	if errs != nil && len(errs) > 0 {
-		log.Printf("error %+v\n", errs[0])
-	}
 	return setupResp(content, resp, body, errs)
 }
 
@@ -28,19 +23,15 @@ func Get(targetUrl string, debug bool) (string, error) {
 	request.SetDebug(debug)
 	resp, body, errs := request.Get(targetUrl).
 		Retry(1, 1*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
-	if errs != nil && len(errs) > 0 {
-		log.Printf("error %+v\n", errs[0])
-	}
 	return setupResp(targetUrl, resp, body, errs)
 }
 
 func setupResp(request string, response *http.Response, body string, errs []error) (string, error) {
 	if errs != nil {
 		var buffer bytes.Buffer
-		buffer.WriteString(fmt.Sprintf("fail to make HTTP request %s\n", request))
 		if len(errs) > 0 {
-			for err := range errs {
-				buffer.WriteString(fmt.Sprintf("%+v\n", err))
+			for _, err := range errs {
+				buffer.WriteString(fmt.Sprintln(err.Error()))
 			}
 		}
 		return "", errors.New(buffer.String())
