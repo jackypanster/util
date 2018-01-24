@@ -3,7 +3,6 @@ package util
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -31,7 +30,7 @@ func setupResp(request string, response *http.Response, body string, errs []erro
 		var buffer bytes.Buffer
 		if len(errs) > 0 {
 			for _, err := range errs {
-				buffer.WriteString(fmt.Sprintln(err.Error()))
+				buffer.WriteString(err.Error())
 			}
 		}
 		return "", errors.New(buffer.String())
