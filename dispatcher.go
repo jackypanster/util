@@ -28,7 +28,7 @@ func (d *Dispatcher) Run() {
 func (d *Dispatcher) dispatch() {
 	for {
 		if len(d.workerPool) <= 8 || len(JobQueue) >= 1024 {
-			log.WithFields(log.Fields{"component": "core"}).Warnf("jobs left %d; available workers remain %d\n", len(JobQueue), len(d.workerPool))
+			log.WithFields(log.Fields{"component": "core"}).Warnf("jobs left %d; available workers remain %d", len(JobQueue), len(d.workerPool))
 		}
 		select {
 		// a job request has been received
