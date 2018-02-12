@@ -1,13 +1,19 @@
 package util
 
 import (
-	"encoding/json"
+	"github.com/json-iterator/go"
 )
+
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 func ToJsonString(v interface{}) string {
 	bs, err := json.Marshal(v)
-	if err != nil {
-		CheckErrf(err, "fail to marshal")
-	}
+	CheckErrf(err, "fail to marshal")
+
 	return string(bs)
+}
+
+func ToStructure(data string, v interface{}) {
+	err := json.Unmarshal([]byte(data), v)
+	CheckErrf(err, "fail to unmarshal")
 }
