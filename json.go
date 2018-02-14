@@ -13,7 +13,7 @@ func ToJsonString(v interface{}) string {
 	return string(bs)
 }
 
-func ToStructure(data string, v interface{}) {
+func ToInstance(data string, v interface{}) {
 	err := json.Unmarshal([]byte(data), v)
 	CheckErrf(err, "fail to unmarshal")
 }
