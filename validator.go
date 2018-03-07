@@ -1,9 +1,10 @@
 package util
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"strings"
 	"fmt"
+	"strings"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 func CheckMap(m map[string]string, name string) map[string]string {
@@ -51,7 +52,7 @@ func CheckStr(value string, name string) string {
 
 func CheckCondition(condition bool, description string) {
 	if condition {
-		log.Panic(description)
+		log.Panicf("[ERROR] %s", description)
 	}
 }
 
