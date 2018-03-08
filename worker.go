@@ -41,11 +41,11 @@ func (w *Worker) Start() {
 			case job := <-w.JobChannel:
 				start := time.Now()
 				if err := job.Do(); err != nil {
-					log.WithFields(log.Fields{"component": "core"}).Errorf("worker#%d, error occurs %+v", w.id, err)
+					log.Errorf("worker#%d, error occurs %+v", w.id, err)
 				}
 				cost := time.Now().Sub(start)
 				if cost > time.Second {
-					log.WithFields(log.Fields{"component": "core"}).Warnf("worker#%d spends %s", w.id, cost)
+					log.Warnf("worker#%d spends %s", w.id, cost)
 				}
 			case <-w.quit:
 				// we have received a signal to stop

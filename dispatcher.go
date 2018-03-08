@@ -27,7 +27,7 @@ func (d *Dispatcher) Run() {
 
 func (d *Dispatcher) dispatch() {
 	for {
-		if len(d.workerPool) <= 2 && len(JobQueue) >= 65536 {
+		if len(d.workerPool) == 0 && len(JobQueue) > d.maxWorkers {
 			log.Warnf("jobs left %d; available workers remain %d", len(JobQueue), len(d.workerPool))
 		}
 		select {
