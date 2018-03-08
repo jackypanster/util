@@ -1,9 +1,5 @@
 package util
 
-import (
-	log "github.com/Sirupsen/logrus"
-)
-
 type Dispatcher struct {
 	// A pool of workers channels that are registered with the dispatcher
 	workerPool chan chan Job
@@ -27,9 +23,9 @@ func (d *Dispatcher) Run() {
 
 func (d *Dispatcher) dispatch() {
 	for {
-		if len(d.workerPool) == 0 && len(JobQueue) > d.maxWorkers {
+		/*if len(d.workerPool) == 0 && len(JobQueue) > d.maxWorkers {
 			log.Warnf("jobs left %d; available workers remain %d", len(JobQueue), len(d.workerPool))
-		}
+		}*/
 		select {
 		// a job request has been received
 		case job := <-JobQueue:
