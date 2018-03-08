@@ -44,7 +44,7 @@ func (w *Worker) Start() {
 					log.Errorf("worker#%d, error occurs %+v", w.id, err)
 				}
 				cost := time.Now().Sub(start)
-				if cost > time.Second {
+				if cost > time.Minute {
 					log.Warnf("worker#%d spends %s", w.id, cost)
 				}
 			case <-w.quit:
