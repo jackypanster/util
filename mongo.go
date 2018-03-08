@@ -14,7 +14,7 @@ func NewMongoSession(host string, port int) *mgo.Session {
 	// Connect to our local mongo
 	session, err := mgo.DialWithTimeout(url, time.Minute*3)
 	// Check if connection error, is mongo running?
-	CheckErr(err)
+	CheckErrf(err, "fail to dial mongo")
 
 	session.SetMode(mgo.Nearest, true)
 	return session
@@ -25,7 +25,7 @@ func NewMgoSession(url string) *mgo.Session {
 	// Connect to our local mongo
 	session, err := mgo.DialWithTimeout(url, time.Minute*3)
 	// Check if connection error, is mongo running?
-	CheckErr(err)
+	CheckErrf(err, "fail to dial mongo")
 
 	session.SetMode(mgo.Nearest, true)
 	return session
