@@ -6,7 +6,9 @@ import (
 
 // Job represents the job to be run
 type Job struct {
-	Do func() error
+	Data   interface{}
+	Do     func() error
+	Handle func(any interface{}) error
 }
 
 // Worker represents the worker that executes the job
@@ -40,6 +42,9 @@ func (w *Worker) Start() {
 				start := time.Now()
 				if err := job.Do(); err != nil {
 					Errorf(Map{"worker": w.id, "error": err}, "")
+				}
+				if err := job.Do(job.Data); err != nil {
+					Errorf(Map{"worker": w.id, "error": err, "data": job.Data}, "")
 				}
 				cost := time.Now().Sub(start)
 				if cost > time.Minute {
