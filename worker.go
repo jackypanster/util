@@ -43,7 +43,7 @@ func (w *Worker) Start() {
 				if err := job.Do(); err != nil {
 					Errorf(Map{"worker": w.id, "error": err}, "")
 				}
-				if err := job.Do(job.Data); err != nil {
+				if err := job.Handle(job.Data); err != nil {
 					Errorf(Map{"worker": w.id, "error": err, "data": job.Data}, "")
 				}
 				cost := time.Now().Sub(start)
