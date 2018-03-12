@@ -18,6 +18,12 @@ func SetOutput(out io.Writer) {
 	log.SetOutput(out)
 }
 
+func SetDebug(enable bool) {
+	if enable {
+		log.SetLevel(log.DebugLevel)
+	}
+}
+
 func Warnf(fields map[string]interface{}, format string, args ...interface{}) {
 	if len(fields) != 0 {
 		log.WithFields(fields).Warnf(format, args)
