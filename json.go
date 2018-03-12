@@ -14,6 +14,7 @@ func ToJsonString(v interface{}) string {
 }
 
 func ToInstance(data string, v interface{}) {
+	CheckStr(data, "data")
 	err := json.Unmarshal([]byte(data), v)
 	CheckErrf(err, "fail to unmarshal")
 }
