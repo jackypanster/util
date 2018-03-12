@@ -37,6 +37,9 @@ func (self *TaskService) Deq() (*Task, error) {
 	if err != nil {
 		return nil, err
 	}
+	if len(reply) == 0 {
+		return nil, nil
+	}
 	var task Task
 	ToInstance(reply, &task)
 	return &task, nil
