@@ -40,6 +40,9 @@ func (self *RedisService) Lpop() (string, error) {
 
 	data, err := redis.String(c.Do("LPOP", self.list))
 	if err != nil {
+		if err == redis.ErrNil {
+			return "", nil
+		}
 		return "", err
 	}
 	return data, nil
