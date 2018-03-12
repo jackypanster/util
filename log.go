@@ -1,10 +1,12 @@
 package util
 
 import (
-	"os"
+	"io"
 
 	log "github.com/Sirupsen/logrus"
 )
+
+type Map map[string]interface{}
 
 func init() {
 	formatter := new(log.JSONFormatter)
@@ -12,11 +14,8 @@ func init() {
 	log.SetFormatter(formatter)
 }
 
-func SetOutput(filename string) {
-	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
-	CheckErrf(err, "fail to open file")
-	log.SetOutput(f)
-	defer f.Close()
+func SetOutput(out io.Writer) {
+	log.SetOutput(out)
 }
 
 func Warnf(fields map[string]interface{}, format string, args ...interface{}) {
@@ -24,5 +23,29 @@ func Warnf(fields map[string]interface{}, format string, args ...interface{}) {
 		log.WithFields(fields).Warnf(format, args)
 	} else {
 		log.Warnf(format, args)
+	}
+}
+
+func Errorf(fields map[string]interface{}, format string, args ...interface{}) {
+	if len(fields) != 0 {
+		log.WithFields(fields).Errorf(format, args)
+	} else {
+		log.Errorf(format, args)
+	}
+}
+
+func Infof(fields map[string]interface{}, format string, args ...interface{}) {
+	if len(fields) != 0 {
+		log.WithFields(fields).Infof(format, args)
+	} else {
+		log.Infof(format, args)
+	}
+}
+
+func Debugf(fields map[string]interface{}, format string, args ...interface{}) {
+	if len(fields) != 0 {
+		log.WithFields(fields).Debugf(format, args)
+	} else {
+		log.Debugf(format, args)
 	}
 }
