@@ -26,32 +26,32 @@ func SetDebug(enable bool) {
 
 func Warnf(fields map[string]interface{}, format string, args ...interface{}) {
 	if len(fields) != 0 {
-		log.WithFields(fields).Warnf(format, args)
+		log.WithFields(fields).Warnf(format, args...)
 	} else {
-		log.Warnf(format, args)
+		log.Warnf(format, args...)
 	}
 }
 
 func Errorf(fields map[string]interface{}, format string, args ...interface{}) {
 	if len(fields) != 0 {
-		log.WithFields(fields).Errorf(format, args)
+		log.WithFields(fields).Errorf(format, args...)
 	} else {
-		log.Errorf(format, args)
+		log.Errorf(format, args...)
 	}
 }
 
 func Infof(fields map[string]interface{}, format string, args ...interface{}) {
 	if len(fields) != 0 {
-		log.WithFields(fields).Infof(format, args)
+		log.WithFields(fields).Infof(format, args...)
 	} else {
-		log.Infof(format, args)
+		log.Infof(format, args...)
 	}
 }
 
 func Debugf(fields map[string]interface{}, format string, args ...interface{}) {
 	if len(fields) != 0 {
-		log.WithFields(fields).Debugf(format, args)
+		log.WithFields(fields).Debugf(format, args...)
 	} else {
-		log.Debugf(format, args)
+		log.Debugf(format, args...)
 	}
 }
