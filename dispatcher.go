@@ -39,3 +39,7 @@ func (d *Dispatcher) dispatch() {
 		}
 	}
 }
+
+func (d *Dispatcher) Workload() int {
+	return len(d.workerPool)
+}

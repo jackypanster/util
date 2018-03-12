@@ -2,8 +2,6 @@ package util
 
 import (
 	"time"
-
-	log "github.com/Sirupsen/logrus"
 )
 
 // Job represents the job to be run
@@ -41,11 +39,11 @@ func (w *Worker) Start() {
 			case job := <-w.JobChannel:
 				start := time.Now()
 				if err := job.Do(); err != nil {
-					log.Errorf("worker#%d, error occurs %+v", w.id, err)
+					Errorf(Map{"worker": w.id, "error": err}, "")
 				}
 				cost := time.Now().Sub(start)
 				if cost > time.Minute {
-					log.Warnf("worker#%d spends %s", w.id, cost)
+					Warnf(nil, "worker#%d spends %s", w.id, cost)
 				}
 			case <-w.quit:
 				// we have received a signal to stop

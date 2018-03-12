@@ -1,29 +1,22 @@
 package main
 
 import (
-	"encoding/json"
-	"log"
+	"os"
 
 	"github.com/jackypanster/util"
 )
 
 func main() {
-	alert := make(map[string]string)
-	alert["title"] = "v1"
-	alert["body"] = "v2"
-	b, _ := json.Marshal(alert)
-	log.Println(string(b))
+	f, err := os.OpenFile("log/log.json", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	util.CheckErrf(err, "fail to open file")
+	util.SetOutput(f)
+	util.SetDebug(true)
+	defer f.Close()
 
-	type Person struct {
-		Name string `json:"name"`
-		Age  int    `json:"age"`
-	}
+	util.Debugf(util.Map{"key": "value"}, "%s %d", "testing", 1)
+	util.Infof(util.Map{"key": "value"}, "%s %s", "testing", "more")
+	util.Warnf(util.Map{"key": "value"}, "%s", "testing")
+	util.Errorf(util.Map{"key": "value"}, "%s", "testing")
 
-	p := Person{"j", 2}
-	str := util.ToJsonString(p)
-	log.Println(str)
-
-	var person Person
-	util.ToStructure(str, &person)
-	log.Printf("%+v", person)
+	util.Errorf(util.Map{"key": "value"}, "")
 }

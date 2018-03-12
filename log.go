@@ -55,3 +55,11 @@ func Debugf(fields map[string]interface{}, format string, args ...interface{}) {
 		log.Debugf(format, args...)
 	}
 }
+
+func Panicf(fields map[string]interface{}, format string, args ...interface{}) {
+	if len(fields) != 0 {
+		log.WithFields(fields).Panicf(format, args...)
+	} else {
+		log.Panicf(format, args...)
+	}
+}
