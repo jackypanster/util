@@ -49,11 +49,7 @@ func Infof(fields map[string]interface{}, format string, args ...interface{}) {
 }
 
 func Debugf(fields map[string]interface{}, format string, args ...interface{}) {
-	if len(fields) != 0 {
-		log.WithFields(fields).Debugf(format, args...)
-	} else {
-		log.Debugf(format, args...)
-	}
+	log.WithFields(fields).Debugf(format, args...)
 }
 
 func Panicf(fields map[string]interface{}, format string, args ...interface{}) {
