@@ -1,19 +1,33 @@
 package util
 
-import "time"
+import (
+	"time"
+
+	"github.com/satori/go.uuid"
+)
 
 const (
-	HIGH = iota
+	HIGH uint = iota
 	NORMAL
 	LOW
 )
 
 type Task struct {
-	ID       string    `json:"id"`
-	Action   string    `json:"action"`
-	Priority int       `json:"priority"`
-	Time     time.Time `json:"time"`
-	Content  string    `json:"content"`
+	ID       string      `json:"id"`
+	Priority uint        `json:"priority"`
+	Time     time.Time   `json:"time"`
+	Retries  uint        `json:"retries"`
+	Content  interface{} `json:"content"`
+}
+
+func NewTask(content interface{}) Task {
+	return Task{
+		ID:       uuid.NewV4().String(),
+		Time:     time.Now(),
+		Retries:  0,
+		Content:  content,
+		Priority: NORMAL,
+	}
 }
 
 type TaskService struct {
@@ -27,12 +41,12 @@ func NewTaskService(redisService *RedisService) *TaskService {
 	}
 }
 
-func (self *TaskService) Enq(task *Task) error {
-	CheckCondition(task == nil, "task should not be nil")
-	return self.Rpush(task)
+func (self *TaskService) Enq(content interface{}) error {
+	CheckCondition(content == nil, "content should not be nil")
+	return self.Rpush(NewTask(content))
 }
 
-func (self *TaskService) Deq() (*Task, error) {
+func (self *TaskService) Deq() (interface{}, error) {
 	reply, err := self.Lpop()
 	if err != nil {
 		return nil, err
@@ -42,5 +56,5 @@ func (self *TaskService) Deq() (*Task, error) {
 	}
 	var task Task
 	ToInstance(reply, &task)
-	return &task, nil
+	return task.Content, nil
 }

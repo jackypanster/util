@@ -38,14 +38,14 @@ func (self *RedisService) Lpop() (string, error) {
 	c := self.pool.Get()
 	defer c.Close()
 
-	data, err := redis.String(c.Do("LPOP", self.list))
+	reply, err := redis.String(c.Do("LPOP", self.list))
 	if err != nil {
 		if err == redis.ErrNil {
 			return "", nil
 		}
 		return "", err
 	}
-	return data, nil
+	return reply, nil
 }
 
 func (self *RedisService) Size() (int, error) {
