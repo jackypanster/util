@@ -22,7 +22,7 @@ func test_enq() {
 		Name: "jp",
 		Age:  100,
 	}
-	err := taskQ.Enq(p)
+	err := taskQ.Enq("133", p, 234)
 	util.CheckErr(err)
 }
 
