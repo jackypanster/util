@@ -21,8 +21,10 @@ type Task struct {
 }
 
 func NewTask(content interface{}) Task {
+	id, err := uuid.NewV4()
+	CheckErrf(err, "unable to gen UUID")
 	return Task{
-		ID:       uuid.NewV4().String(),
+		ID:       id.String(),
 		Time:     time.Now(),
 		Retries:  0,
 		Content:  content,
