@@ -1,11 +1,5 @@
 package util
 
-import (
-	"time"
-
-	"github.com/satori/go.uuid"
-)
-
 const (
 	HIGH uint = iota
 	NORMAL
@@ -15,17 +9,15 @@ const (
 type Task struct {
 	ID       string      `json:"id"`
 	Priority uint        `json:"priority"`
-	Time     time.Time   `json:"time"`
+	Time     int64       `json:"time"`
 	Retries  uint        `json:"retries"`
 	Content  interface{} `json:"content"`
 }
 
-func NewTask(content interface{}) Task {
-	id, err := uuid.NewV4()
-	CheckErrf(err, "unable to gen UUID")
+func NewTask(id string, content interface{}, time int64) Task {
 	return Task{
-		ID:       id.String(),
-		Time:     time.Now(),
+		ID:       id,
+		Time:     time,
 		Retries:  0,
 		Content:  content,
 		Priority: NORMAL,
@@ -43,9 +35,11 @@ func NewTaskService(redisService *RedisService) *TaskService {
 	}
 }
 
-func (self *TaskService) Enq(content interface{}) error {
+func (self *TaskService) Enq(id string, content interface{}, time int64) error {
+	CheckStr(id, "id")
+	CheckCondition(time <= 0, "time should not be negative")
 	CheckCondition(content == nil, "content should not be nil")
-	data, err := ToJsonString(NewTask(content))
+	data, err := ToJsonString(NewTask(id, content, time))
 	if err != nil {
 		return err
 	}
