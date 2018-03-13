@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/jackypanster/util"
@@ -20,18 +19,6 @@ func main() {
 	util.Errorf(util.Map{"key": "value"}, "%s", "testing")
 
 	util.Errorf(util.Map{"key": "value"}, "")
-
-	type P struct {
-		Name string
-	}
-
-	pStr, _ := util.ToJsonString(P{Name: "jp"})
-
-	fmt.Println(pStr)
-
-	var p P
-	util.ToInstance(pStr, &p)
-	fmt.Printf("%#v", p)
 
 	test_enq()
 	test_deq()
