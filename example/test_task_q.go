@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/jackypanster/util"
+	"github.com/mitchellh/mapstructure"
 )
 
 var pool = util.GetRedisPool("127.0.0.1:6379")
@@ -32,7 +33,9 @@ func test_deq() {
 	p, ok := task.Content.(map[string]interface{})
 	fmt.Printf("%#v\n", task)
 	if ok {
-		fmt.Printf("%s, %s", p["name"], p["age"])
+		var result Person
+		mapstructure.Decode(p, &result)
+		fmt.Printf("%s, %d\n", result.Name, result.Age)
 	} else {
 		fmt.Println("cast not ok")
 	}
