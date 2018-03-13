@@ -55,7 +55,7 @@ func CheckCondition(condition bool, description string) {
 }
 
 func CheckErr(err error) {
-	CheckErrf(err, "")
+	CheckErrf(err, "error occurs")
 }
 func CheckErrf(err error, description string) {
 	if err != nil {

@@ -29,5 +29,5 @@ func test_enq() {
 func test_deq() {
 	p, err := taskQ.Deq()
 	util.CheckErr(err)
-	fmt.Printf("%+v", p)
+	fmt.Printf("%#v", p)
 }

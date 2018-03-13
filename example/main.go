@@ -31,7 +31,7 @@ func main() {
 
 	var p P
 	util.ToInstance(pStr, &p)
-	fmt.Printf("%+v", p)
+	fmt.Printf("%#v", p)
 
 	test_enq()
 	test_deq()

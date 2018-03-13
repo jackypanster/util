@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/satori/go.uuid"
@@ -47,7 +46,6 @@ func NewTaskService(redisService *RedisService) *TaskService {
 func (self *TaskService) Enq(content interface{}) error {
 	CheckCondition(content == nil, "content should not be nil")
 	data := ToJsonString(NewTask(content))
-	fmt.Println(data)
 	return self.Rpush(data)
 }
 
@@ -59,7 +57,6 @@ func (self *TaskService) Deq() (interface{}, error) {
 	if len(reply) == 0 {
 		return nil, nil
 	}
-	fmt.Println(reply)
 	var task Task
 	ToInstance(reply, &task)
 	return task.Content, nil

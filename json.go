@@ -8,7 +8,7 @@ var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 func ToJsonString(v interface{}) string {
 	bs, err := json.Marshal(v)
-	CheckErrf(err, "fail to marshal")
+	CheckErrf(err, "unable to marshal")
 	return string(bs)
 }
 
