@@ -62,5 +62,5 @@ func (self *TaskService) Deq() (interface{}, error) {
 	}
 	var task Task
 	err = ToInstance(reply, &task)
-	return task, nil
+	return task, err
 }
