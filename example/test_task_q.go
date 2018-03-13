@@ -13,8 +13,8 @@ var redisService = util.NewRedisService(pool, "testQ")
 var taskQ = util.NewTaskService(redisService)
 
 type Person struct {
-	Name string
-	Age  int
+	Name string `json:"name"`
+	Age  int    `json:age`
 }
 
 func test_enq() {
