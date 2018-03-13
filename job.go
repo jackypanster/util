@@ -52,7 +52,7 @@ func (self *TaskService) Enq(content interface{}) error {
 	return self.Rpush(data)
 }
 
-func (self *TaskService) Deq() (interface{}, error) {
+func (self *TaskService) Deq() (*Task, error) {
 	reply, err := self.Lpop()
 	if err != nil {
 		return nil, err
@@ -62,5 +62,5 @@ func (self *TaskService) Deq() (interface{}, error) {
 	}
 	var task Task
 	err = ToInstance(reply, &task)
-	return task, err
+	return &task, err
 }
