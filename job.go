@@ -45,7 +45,10 @@ func NewTaskService(redisService *RedisService) *TaskService {
 
 func (self *TaskService) Enq(content interface{}) error {
 	CheckCondition(content == nil, "content should not be nil")
-	data := ToJsonString(NewTask(content))
+	data, err := ToJsonString(NewTask(content))
+	if err != nil {
+		return err
+	}
 	return self.Rpush(data)
 }
 
@@ -58,6 +61,9 @@ func (self *TaskService) Deq() (interface{}, error) {
 		return nil, nil
 	}
 	var task Task
-	ToInstance(reply, &task)
+	err = ToInstance(reply, &task)
+	if err != nil {
+		return nil, err
+	}
 	return task.Content, nil
 }

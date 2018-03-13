@@ -6,14 +6,21 @@ import (
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
-func ToJsonString(v interface{}) string {
+func ToJsonString(v interface{}) (string, error) {
 	bs, err := json.Marshal(v)
-	CheckErrf(err, "unable to marshal")
-	return string(bs)
+	if err != nil {
+		Errorf(Map{"error": err}, "unable to encode %#v", v)
+		return "", err
+	}
+	return string(bs), nil
 }
 
-func ToInstance(data string, v interface{}) {
+func ToInstance(data string, v interface{}) error {
 	CheckStr(data, "data")
 	err := json.Unmarshal([]byte(data), v)
-	CheckErrf(err, "unable to unmarshal")
+	if err != nil {
+		Errorf(Map{"error": err}, "unable to decode %s", data)
+		return err
+	}
+	return nil
 }

@@ -29,6 +29,7 @@ func (self *RedisService) Rpush(data interface{}) error {
 
 	_, err := c.Do("RPUSH", self.list, data)
 	if err != nil {
+		Errorf(Map{"error": err}, "unable to rpush %s of %s", data, self.list)
 		return err
 	}
 	return nil
@@ -43,6 +44,7 @@ func (self *RedisService) Lpop() (string, error) {
 		if err == redis.ErrNil {
 			return "", nil
 		}
+		Errorf(Map{"error": err}, "unable to lpop of %s", self.list)
 		return "", err
 	}
 	return reply, nil
@@ -54,6 +56,7 @@ func (self *RedisService) Size() (int, error) {
 
 	size, err := redis.Int(c.Do("LLEN", self.list))
 	if err != nil {
+		Errorf(Map{"error": err}, "unable to llen of %s", self.list)
 		return -1, err
 	}
 	return size, nil
@@ -78,6 +81,9 @@ func NewRedisPool(host string, port int) *redis.Pool {
 				return nil
 			}
 			_, err := c.Do("PING")
+			if err != nil {
+				Errorf(Map{"error": err}, "unable to ping %s", hostPort)
+			}
 			return err
 		},
 	}
@@ -102,6 +108,9 @@ func GetRedisPool(url string) *redis.Pool {
 				return nil
 			}
 			_, err := c.Do("PING")
+			if err != nil {
+				Errorf(Map{"error": err}, "unable to ping %s", url)
+			}
 			return err
 		},
 	}

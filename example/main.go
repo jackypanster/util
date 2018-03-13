@@ -25,7 +25,7 @@ func main() {
 		Name string
 	}
 
-	pStr := util.ToJsonString(P{Name: "jp"})
+	pStr, _ := util.ToJsonString(P{Name: "jp"})
 
 	fmt.Println(pStr)
 
