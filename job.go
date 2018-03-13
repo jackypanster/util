@@ -37,7 +37,7 @@ func NewTaskService(redisService *RedisService) *TaskService {
 
 func (self *TaskService) Enq(id string, content interface{}, time int64) error {
 	CheckStr(id, "id")
-	CheckCondition(time <= 0, "time should not be negative")
+	CheckCondition(time < 0, "time should not be negative")
 	CheckCondition(content == nil, "content should not be nil")
 	data, err := ToJsonString(NewTask(id, content, time))
 	if err != nil {
