@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/jackypanster/util"
 )
 
@@ -10,14 +12,22 @@ var redisService = util.NewRedisService(pool, "testQ")
 
 var taskQ = util.NewTaskService(redisService)
 
+type Person struct {
+	Name string
+	Age  int
+}
+
 func test_enq() {
-	type Person struct {
-		Name string
-		Age  int
-	}
 	p := Person{
 		Name: "jp",
 		Age:  100,
 	}
-	taskQ.Enq()
+	err := taskQ.Enq(p)
+	util.CheckErr(err)
+}
+
+func test_deq() {
+	p, err := taskQ.Deq()
+	util.CheckErr(err)
+	fmt.Printf("%+v", p)
 }

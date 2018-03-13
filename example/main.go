@@ -33,5 +33,6 @@ func main() {
 	util.ToInstance(pStr, &p)
 	fmt.Printf("%+v", p)
 
-	util.ToInstance("", &p)
+	test_enq()
+	test_deq()
 }
