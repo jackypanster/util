@@ -30,13 +30,11 @@ func test_enq() {
 func test_deq() {
 	task, err := taskQ.Deq()
 	util.CheckErr(err)
-	p, ok := task.Content.(map[string]interface{})
+
 	fmt.Printf("%#v\n", task)
-	if ok {
-		var result Person
-		mapstructure.Decode(p, &result)
-		fmt.Printf("%s, %d\n", result.Name, result.Age)
-	} else {
-		fmt.Println("cast not ok")
-	}
+
+	var result Person
+	mapstructure.Decode(task.Content, &result)
+	fmt.Printf("%s, %d\n", result.Name, result.Age)
+
 }
