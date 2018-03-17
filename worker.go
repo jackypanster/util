@@ -41,11 +41,11 @@ func (w *Worker) Start() {
 			case job := <-w.JobChannel:
 				start := time.Now()
 				if err := job.Do(); err != nil {
-					Errorf(Map{"worker": w.id, "error": err}, "")
+					Errorf(Map{"worker": w.id, "cause": err}, "error occurs")
 				}
 				if job.Data != nil {
 					if err := job.Handle(job.Data); err != nil {
-						Errorf(Map{"worker": w.id, "error": err, "data": job.Data}, "")
+						Errorf(Map{"worker": w.id, "cause": err, "data": job.Data}, "error occurs")
 					}
 				}
 				cost := time.Now().Sub(start)
