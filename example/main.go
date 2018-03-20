@@ -13,13 +13,14 @@ func main() {
 	util.SetDebug(true)
 	defer f.Close()
 
-	util.Debugf(util.Map{"key": "value"}, "%s %d", "testing", 1)
-	util.Infof(util.Map{"key": "value"}, "%s %s", "testing", "more")
-	util.Warnf(util.Map{"key": "value"}, "%s", "testing")
-	util.Errorf(util.Map{"key": "value"}, "%s", "testing")
+	//util.Debugf(util.Map{"key": "value"}, "%s %d", "testing", 1)
+	//util.Infof(util.Map{"key": "value"}, "%s %s", "testing", "more")
+	//util.Warnf(util.Map{"key": "value"}, "%s", "testing")
+	//util.Errorf(util.Map{"key": "value"}, "%s", "testing")
 
-	util.Errorf(util.Map{"key": "value"}, "")
+	//util.Errorf(util.Map{"key": "value"}, "")
 
-	test_enq()
-	test_deq()
+	//test_enq()
+	//test_deq()
+	test_trace()
 }
