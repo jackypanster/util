@@ -57,6 +57,9 @@ func CheckCondition(condition bool, description string) {
 func CheckErr(err error) {
 	CheckErrf(err, "error occurs")
 }
+
 func CheckErrf(err error, description string) {
-	Panicf(Map{"error": err}, description)
+	if err != nil {
+		Panicf(Map{"error": err}, description)
+	}
 }
