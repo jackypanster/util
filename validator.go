@@ -50,7 +50,7 @@ func CheckStr(value string, name string) string {
 
 func CheckCondition(condition bool, description string) {
 	if condition {
-		Panicf(Map{"reason": description}, "")
+		Panicf(nil, description)
 	}
 }
 
@@ -58,7 +58,5 @@ func CheckErr(err error) {
 	CheckErrf(err, "error occurs")
 }
 func CheckErrf(err error, description string) {
-	if err != nil {
-		Panicf(Map{"error": err, "reason": description}, "")
-	}
+	Panicf(Map{"error": err}, description)
 }
