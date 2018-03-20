@@ -10,9 +10,7 @@ import (
 type Map map[string]interface{}
 
 func init() {
-	formatter := new(log.JSONFormatter)
-	formatter.TimestampFormat = "02-01-2006 15:04:05"
-	log.SetFormatter(formatter)
+	SetDebug(true)
 	log.AddHook(logrus_stack.StandardHook())
 }
 
@@ -23,6 +21,17 @@ func SetOutput(out io.Writer) {
 func SetDebug(enable bool) {
 	if enable {
 		log.SetLevel(log.DebugLevel)
+	}
+
+	if enable {
+		log.SetFormatter(&log.TextFormatter{
+			ForceColors: true,
+			TimestampFormat: "02-01-2006 15:04:05",
+		})
+	} else {
+		log.SetFormatter(&log.JSONFormatter{
+			TimestampFormat: "02-01-2006 15:04:05",
+		})
 	}
 }
 
