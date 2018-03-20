@@ -23,7 +23,10 @@ func main() {
   
   //fmt.Printf("%#v\n", cfg)
   const url = "http://example.com"
-
+  p := Person{
+	Name: "jp",
+	Age:  100,
+}
   // In most circumstances, use the SugaredLogger. It's 4-10x faster than most
   // other structured logging packages and has a familiar, loosely-typed API.
   sugar := logger.Sugar()
@@ -31,6 +34,7 @@ func main() {
 	  // Structured context as loosely typed key-value pairs.
 	  "url", url,
 	  "attempt", 3,
+	  "person", p,
 	  "backoff", time.Second,
   )
   sugar.Infof("Failed to fetch URL: %s", url)
