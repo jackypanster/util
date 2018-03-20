@@ -3,6 +3,7 @@ package util
 import (
 	"io"
 
+	"github.com/Gurpartap/logrus-stack"
 	log "github.com/Sirupsen/logrus"
 )
 
@@ -12,6 +13,7 @@ func init() {
 	formatter := new(log.JSONFormatter)
 	formatter.TimestampFormat = "02-01-2006 15:04:05"
 	log.SetFormatter(formatter)
+	log.AddHook(logrus_stack.StandardHook())
 }
 
 func SetOutput(out io.Writer) {
