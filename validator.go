@@ -41,6 +41,10 @@ func CheckArray(values []string, name string) []string {
 	return results
 }
 
+func CheckNil(v interface{}, name string) {
+	CheckCondition(v == nil, fmt.Sprintf("%s should not be nil", name))
+}
+
 func CheckStr(value string, name string) string {
 	str := strings.TrimSpace(value)
 	CheckCondition(len(str) == 0, fmt.Sprintf("%s should not be empty", name))
