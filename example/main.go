@@ -40,5 +40,8 @@ func main() {
 		Name: "jp",
 		Age:  100,
 	}
-	log.Info("testing %#v", p)
+	log.Infow("testing", "person", p)
+
+	log = util.NewDevLog()
+	log.Debug("testing", p)
 }
