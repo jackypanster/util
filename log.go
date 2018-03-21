@@ -6,7 +6,7 @@ import (
 )
 
 type Log struct {
-	*zap.Logger
+	*zap.SugaredLogger
 }
 
 func NewProductLog(file string) *Log {
@@ -19,7 +19,7 @@ func NewProductLog(file string) *Log {
 		panic(err)
 	}
 	return &Log{
-		logger,
+		logger.Sugar(),
 	}
 }
 
@@ -31,6 +31,6 @@ func NewDevLog() *Log {
 		panic(err)
 	}
 	return &Log{
-		logger,
+		logger.Sugar(),
 	}
 }
