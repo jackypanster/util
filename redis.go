@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/garyburd/redigo/redis"
@@ -29,7 +30,6 @@ func (self *RedisService) Rpush(data interface{}) error {
 
 	_, err := c.Do("RPUSH", self.list, data)
 	if err != nil {
-		Errorf(Map{"error": err}, "unable to rpush %s of %s", data, self.list)
 		return err
 	}
 	return nil
@@ -44,7 +44,7 @@ func (self *RedisService) Lpop() (string, error) {
 		if err == redis.ErrNil {
 			return "", nil
 		}
-		Errorf(Map{"error": err}, "unable to lpop of %s", self.list)
+		//Errorf(Map{"error": err}, "unable to lpop of %s", self.list)
 		return "", err
 	}
 	return reply, nil
@@ -56,7 +56,6 @@ func (self *RedisService) Size() (int, error) {
 
 	size, err := redis.Int(c.Do("LLEN", self.list))
 	if err != nil {
-		Errorf(Map{"error": err}, "unable to llen of %s", self.list)
 		return -1, err
 	}
 	return size, nil
@@ -73,7 +72,9 @@ func NewRedisPool(host string, port int) *redis.Pool {
 		Wait:        true,
 		Dial: func() (redis.Conn, error) {
 			c, err := redis.Dial("tcp", hostPort)
-			CheckErr(err)
+			if err != nil {
+				log.Printf("fail to dial %s, error %s", hostPort, err.Error())
+			}
 			return c, err
 		},
 		TestOnBorrow: func(c redis.Conn, t time.Time) error {
@@ -82,7 +83,7 @@ func NewRedisPool(host string, port int) *redis.Pool {
 			}
 			_, err := c.Do("PING")
 			if err != nil {
-				Errorf(Map{"error": err}, "unable to ping %s", hostPort)
+				log.Printf("fail to ping %s, error %s", host, err.Error())
 			}
 			return err
 		},
@@ -100,7 +101,9 @@ func GetRedisPool(url string) *redis.Pool {
 		Wait:        true,
 		Dial: func() (redis.Conn, error) {
 			c, err := redis.Dial("tcp", url)
-			CheckErr(err)
+			if err != nil {
+				log.Printf("fail to dial %s, error %s", url, err.Error())
+			}
 			return c, err
 		},
 		TestOnBorrow: func(c redis.Conn, t time.Time) error {
@@ -109,7 +112,7 @@ func GetRedisPool(url string) *redis.Pool {
 			}
 			_, err := c.Do("PING")
 			if err != nil {
-				Errorf(Map{"error": err}, "unable to ping %s", url)
+				log.Printf("fail to ping %s, error %s", url, err.Error())
 			}
 			return err
 		},
