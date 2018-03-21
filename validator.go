@@ -2,13 +2,13 @@ package util
 
 import (
 	"fmt"
+	"log"
 	"strings"
 )
 
 func CheckMap(m map[string]string, name string) map[string]string {
 	result := make(map[string]string)
 
-	CheckCondition(m == nil, fmt.Sprintf("%s should not be null", name))
 	CheckCondition(len(m) == 0, fmt.Sprintf("%s should not be empty", name))
 
 	for k, v := range m {
@@ -25,7 +25,6 @@ func CheckMap(m map[string]string, name string) map[string]string {
 func CheckArray(values []string, name string) []string {
 	var results []string
 
-	CheckCondition(values == nil, fmt.Sprintf("%s should not be null", name))
 	CheckCondition(len(values) == 0, fmt.Sprintf("%s should not be empty", name))
 
 	m := make(map[string]int)
@@ -50,7 +49,7 @@ func CheckStr(value string, name string) string {
 
 func CheckCondition(condition bool, description string) {
 	if condition {
-		Panicf(nil, description)
+		log.Panicf("%s", description)
 	}
 }
 
@@ -60,6 +59,6 @@ func CheckErr(err error) {
 
 func CheckErrf(err error, description string) {
 	if err != nil {
-		Panicf(Map{"error": err}, description)
+		log.Panicf("%s, %s", description, err.Error())
 	}
 }
