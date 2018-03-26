@@ -2,7 +2,7 @@ package util
 
 import "bytes"
 
-func s2t(text string) string {
+func Convert(text string) string {
 	var buffer bytes.Buffer
 	for _, c := range text {
 		buffer.WriteString(string(c))
