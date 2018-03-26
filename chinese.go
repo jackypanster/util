@@ -3,6 +3,9 @@ package util
 import "bytes"
 
 func Convert(text string) string {
+	if len(text) == 0 {
+		return text
+	}
 	var buffer bytes.Buffer
 	for _, c := range text {
 		buffer.WriteString(translate(string(c)))
