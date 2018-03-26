@@ -9,5 +9,5 @@ import (
 func test_str() {
 	str := "Hello, 云"
 
-	fmt.Println(util.s2t(str))
+	fmt.Println(util.Convert(str))
 }
