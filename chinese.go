@@ -5,7 +5,7 @@ import "bytes"
 func Convert(text string) string {
 	var buffer bytes.Buffer
 	for _, c := range text {
-		buffer.WriteString(string(c))
+		buffer.WriteString(translate(string(c)))
 	}
 	return buffer.String()
 }
