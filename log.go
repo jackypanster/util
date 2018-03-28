@@ -13,7 +13,8 @@ func NewProductLog(file string) *Log {
 	CheckStr(file, "file")
 	cfg := zap.NewProductionConfig()
 	cfg.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-	cfg.OutputPaths = append(cfg.OutputPaths, file)
+	//cfg.OutputPaths = append(cfg.OutputPaths, file)
+	cfg.OutputPaths = []string{file}
 	logger, err := cfg.Build()
 	if err != nil {
 		panic(err)
