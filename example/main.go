@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"github.com/jackypanster/util"
 )
+
 var file = "log/log_%d.json"
 var log *util.Log
 
@@ -25,5 +26,5 @@ func main() {
 		go test_log(i, &wg)
 	}
 	wg.Wait()
-	fmt.Println("Main goroutine exit")
+ 	fmt.Println("Main goroutine exit")
 }
