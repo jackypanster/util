@@ -30,3 +30,10 @@ func RandomAny(n int) string {
 	}
 	return string(b)
 }
+
+func Min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
+}
