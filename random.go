@@ -1,8 +1,8 @@
 package util
 
 import (
-	"time"
 	"math/rand"
+	"time"
 )
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -26,7 +26,7 @@ func RandomAny(n int) string {
 	rand.Seed(time.Now().UnixNano())
 	b := make([]rune, n)
 	for i := range b {
-		b[i] = letters[rand.Intn(len(Letters))]
+		b[i] = Letters[rand.Intn(len(Letters))]
 	}
 	return string(b)
 }
