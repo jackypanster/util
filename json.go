@@ -7,6 +7,7 @@ import (
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 func ToJsonString(v interface{}) (string, error) {
+	CheckNil(v, "v")
 	bs, err := json.Marshal(v)
 	if err != nil {
 		return "", err
@@ -14,9 +15,10 @@ func ToJsonString(v interface{}) (string, error) {
 	return string(bs), nil
 }
 
-func ToInstance(data string, v interface{}) error {
-	CheckStr(data, "data")
-	err := json.Unmarshal([]byte(data), v)
+func ToInstance(str string, v interface{}) error {
+	CheckStr(str, "str")
+	CheckNil(v, "v")
+	err := json.Unmarshal([]byte(str), v)
 	if err != nil {
 		return err
 	}

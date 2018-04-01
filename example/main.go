@@ -16,5 +16,7 @@ func main() {
 
 	var s string
 	fmt.Println(len(s))
-	//fmt.Println(s == nil)
+
+	var v interface{}
+	fmt.Println(v == nil)
 }

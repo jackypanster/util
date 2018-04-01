@@ -15,20 +15,20 @@ type RedisService struct {
 
 func NewRedisService(pool *redis.Pool, list string) *RedisService {
 	CheckStr(list, "list")
-	CheckCondition(pool == nil, "redis pool should not be empty")
+	CheckNil(pool, "redis pool should not be empty")
 	return &RedisService{
 		pool: pool,
 		list: list,
 	}
 }
 
-func (self *RedisService) Rpush(data interface{}) error {
-	CheckCondition(data == nil, "data should not be nil")
+func (self *RedisService) Rpush(v interface{}) error {
+	CheckNil(v, "arg should not be nil")
 
 	c := self.pool.Get()
 	defer c.Close()
 
-	_, err := c.Do("RPUSH", self.list, data)
+	_, err := c.Do("RPUSH", self.list, v)
 	if err != nil {
 		return err
 	}
@@ -44,7 +44,6 @@ func (self *RedisService) Lpop() (string, error) {
 		if err == redis.ErrNil {
 			return "", nil
 		}
-		//Errorf(Map{"error": err}, "unable to lpop of %s", self.list)
 		return "", err
 	}
 	return reply, nil

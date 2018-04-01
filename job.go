@@ -29,7 +29,7 @@ type TaskService struct {
 }
 
 func NewTaskService(redisService *RedisService) *TaskService {
-	CheckCondition(redisService == nil, "redisService should not be nil")
+	CheckNil(redisService, "redis service should not be nil")
 	return &TaskService{
 		redisService,
 	}
@@ -38,12 +38,12 @@ func NewTaskService(redisService *RedisService) *TaskService {
 func (self *TaskService) Enq(id string, content interface{}, time int64) error {
 	CheckStr(id, "id")
 	CheckCondition(time < 0, "time should not be negative")
-	CheckCondition(content == nil, "content should not be nil")
-	data, err := ToJsonString(NewTask(id, content, time))
+	CheckNil(content, "content should not be nil")
+	v, err := ToJsonString(NewTask(id, content, time))
 	if err != nil {
 		return err
 	}
-	return self.Rpush(data)
+	return self.Rpush(v)
 }
 
 func (self *TaskService) Deq() (*Task, error) {
@@ -56,5 +56,8 @@ func (self *TaskService) Deq() (*Task, error) {
 	}
 	var task Task
 	err = ToInstance(reply, &task)
-	return &task, err
+	if err != nil {
+		return nil, err
+	}
+	return &task, nil
 }
