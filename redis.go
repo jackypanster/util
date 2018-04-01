@@ -22,6 +22,45 @@ func NewRedisService(pool *redis.Pool, list string) *RedisService {
 	}
 }
 
+func (self *RedisService) Set(key string, v interface{}, ttl int) error {
+	CheckStr(key, "key")
+	CheckNil(v, "v")
+	CheckCondition(ttl <= 0, "ttl should be positive")
+
+	c := self.pool.Get()
+	defer c.Close()
+
+	val, err := Encode(v)
+	if err != nil {
+		return err
+	}
+	_, err = c.Do("SET", key, val, "EX", ttl)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (self *RedisService) Get(key string, result interface{}) error {
+	CheckStr(key, "key")
+	CheckNil(result, "result")
+
+	c := self.pool.Get()
+	defer c.Close()
+
+	reply, err := redis.String(c.Do("GET", key))
+	if err != nil {
+		return err
+	}
+
+	err = Decode(reply, result)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (self *RedisService) Rpush(v interface{}) error {
 	CheckNil(v, "arg should not be nil")
 
