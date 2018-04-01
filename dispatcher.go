@@ -1,5 +1,10 @@
 package util
 
+import (
+	"log"
+	"time"
+)
+
 type Dispatcher struct {
 	// A pool of workers channels that are registered with the dispatcher
 	workerPool chan chan Job
@@ -19,6 +24,7 @@ func (d *Dispatcher) Run() {
 		worker.Start()
 	}
 	go d.dispatch()
+	go d.status()
 }
 
 func (d *Dispatcher) dispatch() {
@@ -34,6 +40,15 @@ func (d *Dispatcher) dispatch() {
 				jobChannel <- job
 			}(job)
 		}
+	}
+}
+
+func (d *Dispatcher) status() {
+	for {
+		if len(d.workerPool) == 0 {
+			log.Printf("all workers are busy and items remain %d", len(JobQueue))
+		}
+		time.Sleep(time.Second * 2)
 	}
 }
 
