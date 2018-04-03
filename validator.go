@@ -22,6 +22,22 @@ func CheckMap(m map[string]string, name string) map[string]string {
 	return result
 }
 
+func CheckMapInf(m map[string]interface{}, name string) map[string]interface{} {
+	result := make(map[string]interface{})
+
+	CheckCondition(len(m) == 0, fmt.Sprintf("%s should not be empty", name))
+
+	for k, v := range m {
+		key := CheckStr(k, "key")
+		CheckNil(v, "val")
+		result[key] = v
+	}
+
+	CheckCondition(len(result) == 0, fmt.Sprintf("%s should not be empty", name))
+
+	return result
+}
+
 func CheckArray(values []string, name string) []string {
 	var results []string
 
