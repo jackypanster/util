@@ -9,6 +9,8 @@ type Log struct {
 	*zap.SugaredLogger
 }
 
+var logger *zap.Logger
+
 func NewProductLog(file string) *Log {
 	CheckStr(file, "file")
 	cfg := zap.NewProductionConfig()
