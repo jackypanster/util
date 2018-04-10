@@ -1,6 +1,10 @@
 package util
 
-import "time"
+import (
+	"time"
+
+	"github.com/satori/go.uuid"
+)
 
 const (
 	HIGH uint = iota
@@ -37,10 +41,13 @@ func NewTaskService(redisService *RedisService) *TaskService {
 	}
 }
 
-func (self *TaskService) Enq(id string, content interface{}) error {
-	CheckStr(id, "id")
+func (self *TaskService) Enq(content interface{}) error {
 	CheckNil(content, "content should not be nil")
-	v, err := ToJsonString(NewTask(id, content))
+	id, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+	v, err := ToJsonString(NewTask(id.String(), content))
 	if err != nil {
 		return err
 	}
