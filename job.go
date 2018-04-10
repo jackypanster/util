@@ -1,5 +1,7 @@
 package util
 
+import "time"
+
 const (
 	HIGH uint = iota
 	NORMAL
@@ -9,15 +11,15 @@ const (
 type Task struct {
 	ID       string      `json:"id"`
 	Priority uint        `json:"priority"`
-	Time     int64       `json:"time"`
+	Time     time.Time   `json:"time"`
 	Retries  uint        `json:"retries"`
 	Content  interface{} `json:"content"`
 }
 
-func NewTask(id string, content interface{}, time int64) Task {
+func NewTask(id string, content interface{}) Task {
 	return Task{
 		ID:       id,
-		Time:     time,
+		Time:     time.Now().Local(),
 		Retries:  0,
 		Content:  content,
 		Priority: NORMAL,
@@ -35,11 +37,10 @@ func NewTaskService(redisService *RedisService) *TaskService {
 	}
 }
 
-func (self *TaskService) Enq(id string, content interface{}, time int64) error {
+func (self *TaskService) Enq(id string, content interface{}) error {
 	CheckStr(id, "id")
-	CheckCondition(time < 0, "time should not be negative")
 	CheckNil(content, "content should not be nil")
-	v, err := ToJsonString(NewTask(id, content, time))
+	v, err := ToJsonString(NewTask(id, content))
 	if err != nil {
 		return err
 	}
