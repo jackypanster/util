@@ -41,6 +41,20 @@ func (self *RedisService) Set(key string, v interface{}, ttl int) error {
 	return nil
 }
 
+func (self *RedisService) HINCRBY(hash string, key string, val int) error {
+	CheckStr(hash, "hash")
+	CheckStr(key, "key")
+
+	c := self.pool.Get()
+	defer c.Close()
+
+	_, err := c.Do("HINCRBY", hash, key, val)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (self *RedisService) Get(key string, result interface{}) error {
 	CheckStr(key, "key")
 	CheckNil(result, "result")
