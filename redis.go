@@ -55,6 +55,19 @@ func (self *RedisService) HINCRBY(hash string, key string, val int) error {
 	return nil
 }
 
+func (self *RedisService) HGETALL(hash string) (map[string]int, error) {
+	CheckStr(hash, "hash")
+
+	c := self.pool.Get()
+	defer c.Close()
+
+	result, err := redis.IntMap(c.Do("HGETALL", hash))
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 func (self *RedisService) Get(key string, result interface{}) error {
 	CheckStr(key, "key")
 	CheckNil(result, "result")
