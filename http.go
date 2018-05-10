@@ -10,10 +10,11 @@ import (
 )
 
 func Post(targetUrl string, content string, debug bool) (string, error) {
-	request := gorequest.New().Timeout(200 * time.Millisecond)
+	//request := gorequest.New().Timeout(200 * time.Millisecond)
+	request := gorequest.New()
 	request.SetDebug(debug)
 	resp, body, errs := request.Post(targetUrl).Send(content).
-		Retry(1, 1*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
+		Retry(2, 2*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
 	return setupResp(content, resp, body, errs)
 }
 
@@ -22,7 +23,7 @@ func Get(targetUrl string, debug bool) (string, error) {
 	request := gorequest.New()
 	request.SetDebug(debug)
 	resp, body, errs := request.Get(targetUrl).
-		Retry(3, 2*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
+		Retry(2, 2*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
 	return setupResp(targetUrl, resp, body, errs)
 }
 
