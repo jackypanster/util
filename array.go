@@ -21,7 +21,7 @@ func Uniq(src []string) []string {
 
 func Contains(s []string, e string) bool {
 	for _, a := range s {
-		if a == e || strings.HasPrefix(a, e) {
+		if strings.TrimSpace(a) == strings.TrimSpace(e) {
 			return true
 		}
 	}
