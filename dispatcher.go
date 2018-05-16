@@ -46,7 +46,7 @@ func (d *Dispatcher) dispatch() {
 func (d *Dispatcher) status() {
 	for {
 		if len(d.workerPool) == 0 {
-			log.Printf("all workers are busy and items remain %d", len(JobQueue))
+			log.Printf("[%s] all workers are busy and items remain %d", time.Now().Local(), len(JobQueue))
 		}
 		time.Sleep(time.Second * 2)
 	}

@@ -40,11 +40,11 @@ func (w *Worker) Start() {
 			case job := <-w.JobChannel:
 				start := time.Now()
 				if err := job.Do(); err != nil {
-					log.Printf("worker#%d, %s", w.id, err.Error())
+					log.Printf("[%s] worker#%d, %s", time.Now().Local(), w.id, err.Error())
 				}
 				cost := time.Now().Sub(start)
 				if cost > time.Minute {
-					log.Printf("worker#%d spends %s", w.id, cost)
+					log.Printf("[%s] worker#%d spends %s", time.Now().Local(), w.id, cost)
 				}
 			case <-w.quit:
 				// we have received a signal to stop
