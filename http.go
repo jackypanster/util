@@ -9,6 +9,16 @@ import (
 	"github.com/parnurzeal/gorequest"
 )
 
+func Send(request *gorequest.SuperAgent, targetUrl string, content string) (string, error) {
+	//request := gorequest.New().Timeout(200 * time.Millisecond)
+	//request := gorequest.New()
+	//request.Transport.DisableKeepAlives = true
+	//request.SetDebug(debug)
+	resp, body, errs := request.Post(targetUrl).Send(content).
+		Retry(1, time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusInternalServerError).End()
+	return setupResp(content, resp, body, errs)
+}
+
 func Post(targetUrl string, content string, debug bool) (string, error) {
 	//request := gorequest.New().Timeout(200 * time.Millisecond)
 	request := gorequest.New()
