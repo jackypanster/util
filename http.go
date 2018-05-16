@@ -12,9 +12,10 @@ import (
 func Post(targetUrl string, content string, debug bool) (string, error) {
 	//request := gorequest.New().Timeout(200 * time.Millisecond)
 	request := gorequest.New()
+	request.Transport.DisableKeepAlives = true
 	request.SetDebug(debug)
 	resp, body, errs := request.Post(targetUrl).Send(content).
-		Retry(2, 2*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
+		Retry(1, time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusInternalServerError).End()
 	return setupResp(content, resp, body, errs)
 }
 
@@ -24,7 +25,7 @@ func Get(targetUrl string, debug bool) (string, error) {
 	request.Transport.DisableKeepAlives = true
 	request.SetDebug(debug)
 	resp, body, errs := request.Get(targetUrl).
-		Retry(2, 2*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
+		Retry(1, time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusInternalServerError).End()
 	return setupResp(targetUrl, resp, body, errs)
 }
 
