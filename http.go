@@ -21,6 +21,7 @@ func Post(targetUrl string, content string, debug bool) (string, error) {
 func Get(targetUrl string, debug bool) (string, error) {
 	//request := gorequest.New().Timeout(200 * time.Millisecond)
 	request := gorequest.New()
+	request.Transport.DisableKeepAlives = true
 	request.SetDebug(debug)
 	resp, body, errs := request.Get(targetUrl).
 		Retry(2, 2*time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusBadRequest, http.StatusInternalServerError).End()
