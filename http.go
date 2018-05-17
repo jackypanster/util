@@ -25,7 +25,7 @@ func DoRequest(url string, body string) (string, error) {
 	req.Header.SetContentType("application/json")
 	req.SetBodyString(body)
 
-	err := client.Do(req, rsp)
+	err := client.DoTimeout(req, rsp, time.Minute)
 	if err != nil {
 		return "", err
 	} else {
