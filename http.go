@@ -15,11 +15,9 @@ func DoRequest(url string, body string) (string, error) {
 	client := &fasthttp.Client{}
 	req := fasthttp.AcquireRequest()
 	rsp := fasthttp.AcquireResponse()
-
-	defer fasthttp.ReleaseRequest(req)
-	defer fasthttp.ReleaseResponse(rsp)
-
-	req.SetConnectionClose()
+	//defer fasthttp.ReleaseRequest(req)
+	//defer fasthttp.ReleaseResponse(rsp)
+	//req.SetConnectionClose()
 	req.SetRequestURI(url)
 	req.Header.SetMethod("POST")
 	req.Header.SetContentType("application/json")
