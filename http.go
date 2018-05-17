@@ -6,17 +6,25 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/valyala/fasthttp"
+
 	"github.com/parnurzeal/gorequest"
 )
 
-func Send(request *gorequest.SuperAgent, targetUrl string, content string) (string, error) {
-	//request := gorequest.New().Timeout(200 * time.Millisecond)
-	//request := gorequest.New()
-	//request.Transport.DisableKeepAlives = true
-	//request.SetDebug(debug)
-	resp, body, errs := request.Post(targetUrl).Send(content).
-		Retry(1, time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusInternalServerError).End()
-	return setupResp(content, resp, body, errs)
+func DoRequest(url string, body string) (string, error) {
+	req := fasthttp.AcquireRequest()
+	req.SetRequestURI(url)
+	req.Header.SetMethod("POST")
+	req.Header.SetContentType("application/json")
+	req.SetBodyString(body)
+	rsp := fasthttp.AcquireResponse()
+	client := &fasthttp.Client{}
+	err := client.DoTimeout(req, rsp, time.Minute)
+	if err != nil {
+		return "", err
+	} else {
+		return string(rsp.Body()), nil
+	}
 }
 
 func Post(targetUrl string, content string, debug bool) (string, error) {
