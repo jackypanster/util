@@ -34,8 +34,9 @@ func (d *Dispatcher) dispatch() {
 		case job := <-JobQueue:
 			// try to obtain a worker job channel that is available
 			// this will block until a worker is idle
+			jobChannel := <-d.workerPool
 			go func(job Job) {
-				jobChannel := <-d.workerPool
+				//jobChannel := <-d.workerPool
 				// dispatch the job to the worker job channel
 				jobChannel <- job
 			}(job)
