@@ -44,9 +44,6 @@ func (w *Worker) Start() {
 				if err != nil {
 					log.Printf("worker#%d spends %s, error %s", w.id, cost, err.Error())
 				}
-				if cost > time.Minute*2 {
-					log.Printf("worker#%d spends %s", w.id, cost)
-				}
 			case <-w.quit:
 				// we have received a signal to stop
 				return
