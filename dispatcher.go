@@ -36,7 +36,7 @@ func (d *Dispatcher) dispatch() {
 			// this will block until a worker is idle
 			go func(job Job) {
 				log.Println("[s] try to get a worker job channel")
-				//jobChannel := <-d.workerPool
+				jobChannel := <-d.workerPool
 				// dispatch the job to the worker job channel
 				jobChannel <- job
 				log.Println("[e] try to get a worker job channel")
