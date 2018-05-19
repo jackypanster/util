@@ -30,27 +30,25 @@ func (d *Dispatcher) Run() {
 func (d *Dispatcher) dispatch() {
 	for {
 		select {
-		// a job request has been received
 		case job := <-JobQueue:
-			// try to obtain a worker job channel that is available
-			// this will block until a worker is idle
-			//go func(job Job) {
-			log.Println("[s] try to get a worker job channel")
-			jobChannel := <-d.workerPool
-			// dispatch the job to the worker job channel
-			jobChannel <- job
-			log.Println("[e] try to get a worker job channel")
-			//}(job)
+			// a job request has been received
+			go func(job Job) {
+				// try to obtain a worker job channel that is available
+				// this will block until a worker is idle
+				jobChannel := <-d.workerPool
+
+				// dispatch the job to the worker job channel
+				jobChannel <- job
+			}(job)
 		}
 	}
 }
 
 func (d *Dispatcher) status() {
 	for {
-		if len(d.workerPool) == 0 {
-			log.Printf("[%s] all workers are busy and items remain %d", time.Now().Local(), len(JobQueue))
-		}
-		time.Sleep(time.Second * 2)
+		log.Printf("[%s] %d workers are available and %d jobs in the buffer",
+			time.Now().Local(), len(d.workerPool), len(JobQueue))
+		time.Sleep(time.Minute)
 	}
 }
 
