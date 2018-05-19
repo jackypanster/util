@@ -39,12 +39,13 @@ func (w *Worker) Start() {
 			select {
 			case job := <-w.JobChannel:
 				start := time.Now()
-				if err := job.Do(); err != nil {
-					log.Printf("[%s] worker#%d, %s", time.Now().Local(), w.id, err.Error())
-				}
+				err := job.Do()
 				cost := time.Now().Sub(start)
-				if cost > time.Minute {
-					log.Printf("[%s] worker#%d spends %s", time.Now().Local(), w.id, cost)
+				if err != nil {
+					log.Printf("worker#%d spends %s, error %s", w.id, cost, err.Error())
+				}
+				if cost > time.Minute*2 {
+					log.Printf("worker#%d spends %s", w.id, cost)
 				}
 			case <-w.quit:
 				// we have received a signal to stop
