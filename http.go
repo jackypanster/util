@@ -23,7 +23,7 @@ func DoRequest(url string, body string) (string, error) {
 	req.Header.SetContentType("application/json")
 	req.SetBodyString(body)
 
-	err := client.DoTimeout(req, rsp, time.Second)
+	err := client.DoTimeout(req, rsp, time.Minute)
 	if err != nil {
 		return "", err
 	} else {
@@ -34,20 +34,22 @@ func DoRequest(url string, body string) (string, error) {
 func Post(targetUrl string, content string, debug bool) (string, error) {
 	//request := gorequest.New().Timeout(200 * time.Millisecond)
 	request := gorequest.New()
-	request.Transport.DisableKeepAlives = true
 	request.SetDebug(debug)
-	resp, body, errs := request.Post(targetUrl).Send(content).
-		Retry(1, time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusInternalServerError).End()
+	/*resp, body, errs := request.Post(targetUrl).Send(content).Retry(2, time.Second*7,
+			http.StatusGatewayTimeout,
+			http.StatusRequestTimeout,
+	        http.StatusInternalServerError).End()*/
+	resp, body, errs := request.Post(targetUrl).Send(content).End()
 	return setupResp(content, resp, body, errs)
 }
 
 func Get(targetUrl string, debug bool) (string, error) {
 	//request := gorequest.New().Timeout(200 * time.Millisecond)
 	request := gorequest.New()
-	request.Transport.DisableKeepAlives = true
 	request.SetDebug(debug)
-	resp, body, errs := request.Get(targetUrl).
-		Retry(1, time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusInternalServerError).End()
+	/*resp, body, errs := request.Get(targetUrl).
+	  Retry(1, time.Second, http.StatusGatewayTimeout, http.StatusRequestTimeout, http.StatusInternalServerError).End()*/
+	resp, body, errs := request.Get(targetUrl).End()
 	return setupResp(targetUrl, resp, body, errs)
 }
 
