@@ -27,6 +27,7 @@ type Operator interface {
 	FindByTimestamp(string, string, interface{}) error
 	FindOne(interface{}, interface{}) error
 	Search(interface{}, interface{}) error
+	Exists(query interface{}) bool
 }
 
 type Service struct {
