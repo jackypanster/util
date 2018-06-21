@@ -142,8 +142,5 @@ func (self *Service) Exists(query interface{}) bool {
 	c := s.DB(self.database).C(self.table)
 
 	n, _ := c.Find(query).Select(bson.M{"_id": 1}).Limit(1).Count()
-	if n == 1 {
-		return true
-	}
-	return false
+	return n == 1
 }
