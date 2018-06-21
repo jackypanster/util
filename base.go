@@ -2,6 +2,7 @@ package util
 
 import (
 	"time"
+
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -133,4 +134,16 @@ func (self *Service) FindOne(query interface{}, result interface{}) error {
 	c := s.DB(self.database).C(self.table)
 
 	return c.Find(query).One(result)
+}
+
+func (self *Service) Exists(query interface{}) bool {
+	s := self.session.Copy()
+	defer s.Close()
+	c := s.DB(self.database).C(self.table)
+
+	n, _ := c.Find(query).Select(bson.M{"_id": 1}).Limit(1).Count()
+	if n == 1 {
+		return true
+	}
+	return false
 }
