@@ -21,7 +21,7 @@ func (d *Dispatcher) Run() {
 	for i := 0; i < d.maxWorkers; i++ {
 		worker := NewWorker(d.workerPool)
 		worker.SetId(i)
-		worker.Start()
+		go worker.Start()
 	}
 	go d.dispatch()
 	go d.status()
