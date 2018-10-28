@@ -32,7 +32,6 @@ func (w *Worker) SetId(num int) {
 
 // Start method starts the run loop for the worker, listening for a quit channel in case we need to stop it
 func (w *Worker) Start() {
-
 	for {
 		// register the current worker into the worker queue
 		w.WorkerPool <- w.JobChannel
@@ -49,7 +48,6 @@ func (w *Worker) Start() {
 			return
 		}
 	}
-
 }
 
 // Stop method signals the worker to stop listening for work requests
