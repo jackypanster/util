@@ -33,22 +33,22 @@ func (w *Worker) SetId(num int) {
 // Start method starts the run loop for the worker, listening for a quit channel in case we need to stop it
 func (w *Worker) Start() {
 
-		for {
-			// register the current worker into the worker queue
-			w.WorkerPool <- w.JobChannel
-			select {
-			case job := <-w.JobChannel:
-				start := time.Now()
-				err := job.Do()
-				cost := time.Now().Sub(start)
-				if err != nil {
-					log.Printf("worker#%d spends %s, error %s", w.id, cost, err.Error())
-				}
-			case <-w.quit:
-				// we have received a signal to stop
-				return
+	for {
+		// register the current worker into the worker queue
+		w.WorkerPool <- w.JobChannel
+		select {
+		case job := <-w.JobChannel:
+			start := time.Now()
+			err := job.Do()
+			cost := time.Now().Sub(start)
+			if err != nil {
+				log.Printf("worker#%d spends %s, error %s", w.id, cost, err.Error())
 			}
+		case <-w.quit:
+			// we have received a signal to stop
+			return
 		}
+	}
 
 }
 
