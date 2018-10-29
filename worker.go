@@ -41,7 +41,7 @@ func (w *Worker) Start() {
 			err := job.Do()
 			cost := time.Now().Sub(start)
 			if err != nil {
-				log.Printf("worker#%d spends %s, error %s", w.id, cost, err.Error())
+				log.Printf("worker#%d spend %s, error %s", w.id, cost, err.Error())
 			}
 		case <-w.quit:
 			// we have received a signal to stop
